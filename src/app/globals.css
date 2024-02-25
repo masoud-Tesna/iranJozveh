@@ -1,0 +1,106 @@
+@import 'antd/dist/reset.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: samimFont;
+  src: url('/fonts/Samim-FD.eot');
+  src: url('/fonts/Samim-FD.eot?#iefix') format('embedded-opentype'),
+  url('/fonts/Samim-FD.woff2') format('woff2'),
+  url('/fonts/Samim-FD.woff') format('woff'),
+  url('/fonts/Samim-FD.ttf') format('truetype');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: samimFont;
+  src: url('/fonts/Samim-Bold-FD.eot');
+  src: url('/fonts/Samim-Bold-FD.eot?#iefix') format('embedded-opentype'),
+  url('/fonts/Samim-Bold-FD.woff2') format('woff2'),
+  url('/fonts/Samim-Bold-FD.woff') format('woff'),
+  url('/fonts/Samim-Bold-FD.ttf') format('truetype');
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: samimFont;
+  src: url('/fonts/Samim-Medium-FD.eot');
+  src: url('/fonts/Samim-Medium-FD.eot?#iefix') format('embedded-opentype'),
+  url('/fonts/Samim-Medium-FD.woff2') format('woff2'),
+  url('/fonts/Samim-Medium-FD.woff') format('woff'),
+  url('/fonts/Samim-Medium-FD.ttf') format('truetype');
+  font-weight: 500;
+}
+
+@layer utilities {
+  .d-rtl {
+    direction: rtl;
+  }
+  
+  .d-ltr {
+    direction: ltr;
+  }
+  
+  .center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .--listDot {
+    @apply size-4 bg-gray-70 rounded-full inline-block me-8 align-middle;
+  }
+}
+
+@layer components {
+
+}
+
+.ant-layout-sider {
+  .ant-menu-item {
+    @apply px-[8px] font-bold text-captionLg !important;
+  }
+}
+
+.ant-table-wrapper {
+  .ant-table {
+    @apply text-captionMd font-bold !important;
+    
+    .ant-table-thead {
+      @apply shadow-9;
+    }
+    
+    .ant-table-cell {
+      @apply text-captionMd border-0 !important;
+      
+      &:before {
+        display: none;
+      }
+    }
+    
+    .ant-table-tbody {
+      .ant-table-cell.ant-table-cell-row-hover,
+      .ant-table-row:nth-child(even) {
+        @apply bg-[#F9F9F9] !important;
+      }
+    }
+  }
+}
+
+.ant-form-item-explain-error {
+  @apply text-captionSm md:text-captionLg ;
+}
+
+.ant-form-item {
+  @apply mb-[20px] md:mb-[30px] !important;
+}
+
+.--newUserSelectedCourse {
+  > div {
+    &:nth-child(2n+1) {
+      @apply bg-[rgba(98,81,221,.05)];
+    }
+  }
+}
