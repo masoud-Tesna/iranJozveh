@@ -4,3 +4,4 @@ export {CollaborationOutlined} from './CollaborationTextOutlined';
 export {SearchOutlined} from './SearchOutlined';
 export {CalendarDateOutlined} from './CalendarDateOutlined';
 export {TrashOutlined} from './TrashOutlined';
+export {TrashFilled} from './TrashFilled';

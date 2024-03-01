@@ -1,6 +1,7 @@
 import './globals.css';
 import 'react-loading-skeleton/dist/skeleton.css';
 import CombineProvider from '@/app/CombineProvider';
+import AntdLayout from '@/app/components/AntdLayout';
 
 export const metadata = {
   title: 'new APP',
@@ -13,7 +14,9 @@ const RootLayout = ({children}) => {
     <body className={'!font-samim'}>
     <div className="--hiradApp h-full">
       <CombineProvider>
-        {children}
+        <AntdLayout>
+          {children}
+        </AntdLayout>
       </CombineProvider>
     </div>
     </body>

@@ -9,6 +9,7 @@ import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {AntdRegistry} from '@ant-design/nextjs-registry';
+import {AuthProvider} from '@/app/context/auth/AuthContext';
 
 const CombineProvider = ({children}) => {
   
@@ -16,23 +17,25 @@ const CombineProvider = ({children}) => {
   
   return (
     <QueryClientProvider client={queryClient}>
-      <AntdRegistry>
-        <ConfigProvider theme={antdTheme} direction={'rtl'} locale={faIR}>
-          <ToastContainer
-            position="top-right"
-            autoClose={4000}
-            rtl
-            draggable
-            theme="colored"
-            closeButton
-            bodyClassName="text-[0.875rem] font-vazir"
-          />
-          
-          {children}
-          
-          <ReactQueryDevtools />
-        </ConfigProvider>
-      </AntdRegistry>
+      <AuthProvider>
+        <AntdRegistry>
+          <ConfigProvider theme={antdTheme} direction={'rtl'} locale={faIR}>
+            <ToastContainer
+              position="top-right"
+              autoClose={4000}
+              rtl
+              draggable
+              theme="colored"
+              closeButton
+              bodyClassName="text-[0.875rem] font-vazir"
+            />
+            
+            {children}
+            
+            <ReactQueryDevtools />
+          </ConfigProvider>
+        </AntdRegistry>
+      </AuthProvider>
     </QueryClientProvider>
   );
 };

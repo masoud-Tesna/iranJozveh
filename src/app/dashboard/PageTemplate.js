@@ -3,11 +3,27 @@
 import {Col, Layout, Row, Skeleton} from 'antd';
 import Header from '@/app/dashboard/components/Header';
 import Sidebar from '@/app/dashboard/components/Sidebar';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import DashboardPageIsLoading from './components/DashboardPageIsLoading';
+import {useAuth} from '@/app/context/auth/AuthContext';
+import {redirect, useRouter} from 'next/navigation';
 
 const PageTemplate = ({children}) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  
+  const {isLoggedIn} = useAuth();
+  
+  const [isLoading, setIsLoading] = useState(true);
+  
+  useEffect(() => {
+    if (!isLoggedIn) {
+      redirect('/auth/login');
+      setIsLoading(false);
+    }
+    else {
+      setIsLoading(false);
+    }
+  }, [isLoggedIn]);
   
   return (
     <Layout className="min-h-full" hasSider>

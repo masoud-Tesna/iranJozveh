@@ -51,6 +51,10 @@ const rulesMessage = {
     vars: [],
     message: 'رمز های عبور باهم مطابقت ندارند'
   },
+  inputStartWith: {
+    vars: ['inputName', 'startWith'],
+    message: '{{inputName}} باید با {{startWith}} شروع بشه'
+  },
   mobileStartWith: {
     vars: [],
     message: 'شماره موبایل باید با 09 شروع شود'

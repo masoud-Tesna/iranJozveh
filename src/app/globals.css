@@ -94,7 +94,7 @@
 }
 
 .ant-form-item {
-  @apply mb-[20px] md:mb-[30px] !important;
+  @apply mb-[20px] md:mb-[30px];
 }
 
 .--newUserSelectedCourse {
@@ -102,5 +102,78 @@
     &:nth-child(2n+1) {
       @apply bg-[rgba(98,81,221,.05)];
     }
+  }
+}
+
+.ant-divider {
+  @apply border-gray-100/20 before:hidden !important;
+  
+  & > .ant-divider-inner-text {
+    @apply text-secondary text-captionXl;
+  }
+  
+  &.ant-divider-with-text-left {
+    & > span {
+      @apply p-0 pe-16 !important;
+    }
+  }
+  
+  &.ant-divider-with-text-right {
+    & > span {
+      @apply p-0 ps-16 !important;
+    }
+  }
+}
+
+
+.--avatar-uploader-formItem {
+  
+  .--avatar-uploader {
+    .ant-upload-select {
+      @apply border-solid w-full h-[140px] bg-neutral-white !important;
+    }
+    
+    &.--removeLogo {
+      .ant-upload-select {
+        &:hover {
+          .--trashIcon {
+            @apply block;
+          }
+          
+          span.ant-upload {
+            position: relative;
+            
+            &:before {
+              position: absolute;
+              z-index: 1;
+              width: calc(100% - calc(8px * 2));
+              height: calc(100% - calc(8px * 2));
+              background-color: rgba(0, 0, 0, .45);
+              opacity: 1;
+              transition: all .3s;
+              content: ' ';
+            }
+          }
+        }
+      }
+      
+      .ant-upload-disabled {
+        @apply cursor-auto !important;
+      }
+    }
+    
+    .--trashIcon {
+      @apply absolute hidden;
+    }
+  }
+  
+  &.ant-form-item-has-error {
+    .ant-upload-select {
+      @apply border-[#ff4d4f] !important;
+    }
+  }
+  
+  .ant-form-item-explain-error {
+    @apply text-captionMd;
   }
 }

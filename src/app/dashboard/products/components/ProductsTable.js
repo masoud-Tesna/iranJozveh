@@ -7,7 +7,11 @@ import {Button, Col, Form, Input, Modal, Row, Select, Switch, Table} from 'antd'
 import {SearchOutlined} from '@/templates/icons';
 import debounce from 'lodash.debounce';
 import dynamic from 'next/dynamic';
-import NewProductForm from './NewProductForm';
+import SaveProductForm from './SaveProductForm';
+import {formatNumber} from '@/utils/helpers';
+import baseURL from '@/utils/axios/baseURL';
+import {EditOutlined, FilePdfOutlined} from '@ant-design/icons';
+import Image from 'next/image';
 
 const DatePicker = dynamic(() => import('@/templates/UI/DatePicker').then((mod) => mod.DatePicker), {ssr: false});
 
@@ -15,29 +19,43 @@ const ProductsTable = () => {
   const [formRef] = Form.useForm();
   const request = useRequest();
   
-  const [filters, setFilters] = useState({page: 1});
-  const [searchFilter, setSearchFilter] = useState({});
-  const [searchBy, setSearchBy] = useState('');
+  const [filters, setFilters] = useState({pageNumber: 1});
   const [newProductModalOpen, setNewProductModalOpen] = useState(false);
+  const [editProductId, setEditProductId] = useState('');
+  const [editProductData, setEditProductData] = useState({});
   
-  const handleOnChangeSearchFilter = (value, searchBy) => {
-    setSearchFilter({[searchBy]: value});
-  };
+  const handleOnChangeSearchFilter = search => setFilters(current => ({...current, search}));
   
-  const debouncedOnSearch = useMemo((value, searchBy) => {
-    return debounce((value, searchBy) => handleOnChangeSearchFilter(value, searchBy), 500);
-  }, []);
+  const debouncedOnSearch = useMemo(search => debounce(handleOnChangeSearchFilter, 500), []);
   
-  const {isLoading, data: productssData} = request.useQuery({
-    url: 'api/v1/management/products-list',
-    params: {...filters, ...searchFilter},
-    queryKey: ['products-list', {...filters, ...searchFilter}]
+  const {isLoading, data: productsData} = request.useQuery({
+    url: '/api/v1/product',
+    params: filters,
+    queryKey: ['products-list', filters]
   });
   
-  const products = productssData?.response?.products || [];
-  const productsCount = productssData?.response?.count || 0;
+  const products = productsData?.response?.products || [];
+  const productsCount = productsData?.response?.count || 0;
+  
+  const handleEditProduct = (userId, userData) => {
+    setEditProductId(userId);
+    setEditProductData(userData);
+    setNewProductModalOpen(true);
+  };
   
   const columns = [
+    {
+      title: 'تصویر',
+      align: 'center',
+      dataIndex: 'image',
+      render: (image) => (
+        image ?
+          <Image src={baseURL?._baseURL + '/api/public/products/image/' + image} alt="" width={40} height={40} /> :
+          <span className="p-8 bg-neutral-gray-4 border-solid border-[.5px] border-neutral-gray-8 rounded-full">
+            <FilePdfOutlined className="!text-primary !text-[25px]" />
+          </span>
+      )
+    },
     {
       title: 'کد محصول',
       align: 'center',
@@ -46,30 +64,32 @@ const ProductsTable = () => {
     {
       title: 'نام محصول',
       align: 'center',
-      dataIndex: 'productName'
+      dataIndex: 'name'
     },
     {
       title: 'قیمت',
       align: 'center',
-      dataIndex: 'price'
+      dataIndex: 'price',
+      render: price => formatNumber(price)
     },
     {
-      title: 'فایل',
+      title: 'ویرایش',
       align: 'center',
-      dataIndex: 'fileName'
-    },
-    {
-      title: '',
-      align: 'center',
-      dataIndex: 'action'
+      dataIndex: '_id',
+      render: (productId, row) => <EditOutlined
+        className="!text-primary !text-[18px] cursor-pointer"
+        onClick={() => handleEditProduct(productId, row)}
+      />
     }
   ];
   
-  const handleOnCloseNewProductModal = () => setNewProductModalOpen(false);
+  const handleOnCloseNewProductModal = () => {
+    setEditProductId('');
+    setEditProductData({});
+    setNewProductModalOpen(false);
+  };
   
-  useEffect(() => {
-    return () => debouncedOnSearch.cancel();
-  }, []);
+  useEffect(() => () => debouncedOnSearch.cancel(), []);
   
   return (
     <>
@@ -87,25 +107,14 @@ const ProductsTable = () => {
                   const value = e?.target?.value;
                   
                   if (!value?.length) {
-                    setSearchFilter({});
+                    setFilters(current => {
+                      const {search: _, ...rest} = current;
+                      
+                      return rest;
+                    });
                   }
-                  else {
-                    if (searchBy === 'mobileNumber') {
-                      if (value.length >= 4 && value.length <= 11) {
-                        debouncedOnSearch(value, 'mobileNumber');
-                      }
-                    }
-                    else if (['firstName', 'lastName', 'realstateName'].includes(searchBy)) {
-                      if (value.length >= 2) {
-                        debouncedOnSearch(value, searchBy);
-                      }
-                    }
-                  }
-                }}
-                onFocus={() => {
-                  if (!searchBy?.length) {
-                    return document.getElementById('searchByField').focus(
-                    );
+                  else if (value.length >= 3) {
+                    debouncedOnSearch(value);
                   }
                 }}
               />
@@ -139,16 +148,19 @@ const ProductsTable = () => {
       </div>
       
       <Modal
-        // open={newProductModalOpen}
-        open
+        open={newProductModalOpen}
         onCancel={handleOnCloseNewProductModal}
         maskClosable={false}
-        title="افزودن محصول جدید"
+        title={editProductId ? 'ویرایش محصول' : 'افزودن محصول جدید'}
         footer={null}
         className="!w-full md:!w-[65%]"
         destroyOnClose
       >
-        <NewProductForm onCancel={handleOnCloseNewProductModal} />
+        <SaveProductForm
+          handleCloseModal={handleOnCloseNewProductModal}
+          editProductId={editProductId}
+          editProductData={editProductData}
+        />
       </Modal>
     </>
   );

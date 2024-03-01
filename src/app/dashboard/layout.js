@@ -1,3 +1,5 @@
+'use client';
+
 import PageTemplate from './PageTemplate';
 
 const DashboardLayout = ({children}) => {

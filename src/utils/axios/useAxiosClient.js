@@ -2,12 +2,14 @@ import axios from 'axios';
 import baseURL from './baseURL';
 import {useQueryClient} from '@tanstack/react-query';
 import {useRouter} from 'next/navigation';
+import {useAuth} from '@/app/context/auth/AuthContext';
+import handleRefreshToken from '@/utils/axios/handleRefreshToken';
 
 export const useAxiosClient = ({type = 'JSON', customRequestHeader = {}}) => {
-  const route = useRouter();
+  const {handleLogout, tokenInfo, handleChangeAccessToken} = useAuth();
   const queryClient = useQueryClient();
   
-  const accessToken = null; // set accessToken
+  const accessToken = tokenInfo?.accessToken; // set accessToken
   
   // set default header
   const headers = {
@@ -31,13 +33,24 @@ export const useAxiosClient = ({type = 'JSON', customRequestHeader = {}}) => {
     async (error) => {
       const originalRequest = error.config; // save original request
       
-      // if expire accessToken
+      console.log('error >>>', error?.response);
+      
       if (error?.response?.status === 401) {
-        await handleLogout(queryClient);
+        const newAccessToken = await handleRefreshToken(tokenInfo?.refreshToken);
+        
+        if (newAccessToken) {
+          await handleChangeAccessToken(newAccessToken);
+          
+          originalRequest.headers.Authorization = newAccessToken;
+          
+          return axios(originalRequest);
+        }
+        else {
+          return await handleLogout();
+        }
       }
-      else {
-        return Promise.reject(error?.response?.data);
-      }
+      
+      return Promise.reject(error?.response?.data);
     }
   );
   

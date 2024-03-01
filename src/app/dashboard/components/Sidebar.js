@@ -21,7 +21,7 @@ const Sidebar = () => {
         />
       </div>
       
-      <div className="text-white text-captionMd ms-[30px] mb-[40px]">
+      <div className="text-white text-captionMd ms-[30px] mb-24">
         منو
       </div>
       

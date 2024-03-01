@@ -37,7 +37,8 @@ const config: Config = {
         64: '64px'
       },
       backgroundImage: {
-        primary: 'linear-gradient(180deg, #050138 73.44%, #6251DD 170.4%)'
+        primary: 'linear-gradient(180deg, #050138 73.44%, #6251DD 170.4%)',
+        auth: 'linear-gradient(180deg, rgba(5, 1, 56, 0.50) 62.39%, rgba(255, 255, 255, 0.04) 144.75%)'
       },
       boxShadow: {
         1: '0 4px 10px 2px rgba(0, 0, 0, .05)',
@@ -49,6 +50,7 @@ const config: Config = {
       },
       colors: {
         primary: '#6251DD',
+        secondary: '#050138',
         gray: {
           10: '#F8F8F8',
           20: '#F5F5F5',
@@ -59,7 +61,22 @@ const config: Config = {
           70: '#6D6D6D',
           80: '#656565',
           90: '#F5F7F9',
-          100: '#6D6D6D'
+          100: '#090937'
+        },
+        neutral: {
+          white: '#FFFFFF',
+          gray: {
+            1: '#F9F9F9',
+            2: '#EDEDED',
+            3: '#E1E1E1',
+            4: '#CBCBCB',
+            5: '#ADADAD',
+            6: '#757575',
+            7: '#353535',
+            8: '#E5E7EB',
+            9: '#F5F7F9'
+          },
+          black: '#0C0C0C'
         }
       },
       fontSize: {

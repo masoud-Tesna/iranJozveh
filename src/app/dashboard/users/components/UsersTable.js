@@ -7,11 +7,14 @@ import {DateObject} from 'react-multi-date-picker';
 import gregorian from 'react-date-object/calendars/gregorian';
 import gregorian_en from 'react-date-object/locales/gregorian_en';
 import persian from 'react-date-object/calendars/persian';
-import {Button, Col, Form, Input, Modal, Row, Select, Switch, Table} from 'antd';
+import {Button, Col, Form, Input, Modal, Row, Select, Switch, Table, Typography} from 'antd';
 import {SearchOutlined} from '@/templates/icons';
 import debounce from 'lodash.debounce';
 import dynamic from 'next/dynamic';
-import NewUserForm from './NewUserForm';
+import SaveUserForm from './SaveUserForm';
+import {truncatedMiddleText} from '@/utils/helpers';
+import {useAxiosClient} from '@/utils/axios/useAxiosClient';
+import {EditOutlined} from '@ant-design/icons';
 
 const DatePicker = dynamic(() => import('@/templates/UI/DatePicker').then((mod) => mod.DatePicker), {ssr: false});
 
@@ -20,53 +23,75 @@ const UsersTable = () => {
   const request = useRequest();
   const queryClient = useQueryClient();
   
-  const [filters, setFilters] = useState({page: 1});
-  const [searchFilter, setSearchFilter] = useState({});
-  const [searchBy, setSearchBy] = useState('');
+  const [filters, setFilters] = useState({pageNumber: 1});
   const [newUserModalOpen, setNewUserModalOpen] = useState(false);
   
-  const handleOnChangeSearchFilter = (value, searchBy) => {
-    setSearchFilter({[searchBy]: value});
-  };
+  const [editUserId, setEditUserId] = useState('');
+  const [editUserData, setEditUserData] = useState({});
   
-  const debouncedOnSearch = useMemo((value, searchBy) => {
-    return debounce((value, searchBy) => handleOnChangeSearchFilter(value, searchBy), 500);
-  }, []);
+  const handleOnChangeNationalCodeFilter = nationalCode => setFilters(current => ({...current, nationalCode}));
+  
+  const debouncedOnSearchNationalCode = useMemo(search => debounce(handleOnChangeNationalCodeFilter, 500), []);
+  
+  const handleOnChangeTokenFilter = token => setFilters(current => ({...current, token}));
+  
+  const debouncedOnSearchToken = useMemo(search => debounce(handleOnChangeTokenFilter, 500), []);
   
   const {isLoading, data: usersData} = request.useQuery({
-    url: 'api/v1/management/users-list',
-    params: {...filters, ...searchFilter},
-    queryKey: ['users-list', {...filters, ...searchFilter}]
+    url: '/api/v1/user',
+    params: filters,
+    queryKey: ['users-list', filters]
   });
   
-  const users = usersData?.response?.foundedUser || [];
+  const users = usersData?.response?.users || [];
   const usersCount = usersData?.response?.count || 0;
   
-  const {mutateAsync: banUserRequest, isPending: banUserIsLoading} = request.useMutation({
-    url: '/api/v1/management/ban-user',
-    method: 'patch',
-    mutationKey: ['ban-user']
-  });
+  const axiosClient = useAxiosClient({});
+  
+  const activateUserAxios = async (userId) => {
+    const result = await axiosClient.request(
+      {
+        method: 'patch',
+        url: `/api/v1/user/activate/${userId}`
+      }
+    );
+    return result?.data;
+  };
+  
+  const deactivateUserAxios = async (userId) => {
+    const result = await axiosClient.request(
+      {
+        method: 'patch',
+        url: `/api/v1/user/deactivate/${userId}`
+      }
+    );
+    return result?.data;
+  };
   
   const {mutateAsync: activeUserRequest, isPending: activeUserIsLoading} = request.useMutation({
-    url: '/api/v1/management/activate-user',
-    method: 'patch',
+    mutationFn: variables => activateUserAxios(variables?.userId),
     mutationKey: ['activate-user']
   });
+  
+  const {mutateAsync: deactivateUserRequest, isPending: deactivateUserIsLoading} = request.useMutation({
+    mutationFn: variables => deactivateUserAxios(variables?.userId),
+    mutationKey: ['deactivate-user']
+  });
+  
   
   const handleOnChangeSwitch = async (value, userId) => {
     try {
       if (!value) {
-        await banUserRequest({userId});
+        await deactivateUserRequest({userId});
         queryClient.setQueryData(
           ['users-list', filters],
           oldData => ({
             ...oldData,
             response: {
               ...oldData.response,
-              foundedUser: oldData?.response?.foundedUser?.map(item => {
+              users: oldData?.response?.users?.map(item => {
                 if (item?._id === userId) {
-                  return {...item, status: 'ban'};
+                  return {...item, status: 'deactive'};
                 }
                 return item;
               })
@@ -82,7 +107,7 @@ const UsersTable = () => {
             ...oldData,
             response: {
               ...oldData.response,
-              foundedUser: oldData?.response?.foundedUser?.map(item => {
+              users: oldData?.response?.users?.map(item => {
                 if (item?._id === userId) {
                   return {...item, status: 'active'};
                 }
@@ -97,12 +122,17 @@ const UsersTable = () => {
     }
   };
   
+  const handleEditUser = (userId, userData) => {
+    setEditUserId(userId);
+    setEditUserData(userData);
+    setNewUserModalOpen(true);
+  };
+  
   const columns = [
     {
       title: 'نام و نام خانوادگی',
       align: 'center',
-      key: 'fullName',
-      render: (_, row) => `${row?.firstName} ${row?.lastName}`
+      dataIndex: 'fullName'
     },
     {
       title: 'کد ملی',
@@ -126,7 +156,17 @@ const UsersTable = () => {
     {
       title: 'توکن',
       align: 'center',
-      dataIndex: 'token'
+      key: 'token',
+      render: (_, {token}) => (
+        <Typography.Paragraph
+          copyable={{
+            text: token
+          }}
+          className="!text-gray-70 !text-captionSm !m-0"
+        >
+          {truncatedMiddleText({text: token})}
+        </Typography.Paragraph>
+      )
     },
     {
       title: 'وضعیت',
@@ -143,15 +183,24 @@ const UsersTable = () => {
     {
       title: 'ویرایش',
       align: 'center',
-      dataIndex: 'token'
+      dataIndex: '_id',
+      render: (userId, row) => <EditOutlined
+        className="!text-primary !text-[18px] cursor-pointer"
+        onClick={() => handleEditUser(userId, row)}
+      />
     }
   ];
   
-  const handleOnCloseNewUserModal = () => setNewUserModalOpen(false);
+  const handleOnCloseNewUserModal = () => {
+    setEditUserId('');
+    setEditUserData({});
+    setNewUserModalOpen(false);
+  };
   
   useEffect(() => {
     return () => {
-      debouncedOnSearch.cancel();
+      debouncedOnSearchNationalCode.cancel();
+      debouncedOnSearchToken.cancel();
     };
   }, []);
   
@@ -159,45 +208,54 @@ const UsersTable = () => {
     <>
       <Form form={formRef}>
         <Row gutter={11} justify="space-between">
-          <Col span={12}>
+          <Col span={18}>
             <Row gutter={11}>
               <Col span={10}>
-                <DatePicker
-                  placeholder="تاریخ"
-                />
-              </Col>
-              
-              <Col span={14}>
                 <Form.Item
-                  name={'search'}
+                  name={'nationalCode'}
                   noStyle
                 >
                   <Input
-                    placeholder={'جستجو...'}
+                    placeholder={'جستجو با کد ملی...'}
                     suffix={<SearchOutlined className="!text-gray-40" />}
                     onChange={e => {
                       const value = e?.target?.value;
                       
                       if (!value?.length) {
-                        setSearchFilter({});
+                        setFilters(current => {
+                          const {nationalCode: _, ...rest} = current;
+                          
+                          return rest;
+                        });
                       }
-                      else {
-                        if (searchBy === 'mobileNumber') {
-                          if (value.length >= 4 && value.length <= 11) {
-                            debouncedOnSearch(value, 'mobileNumber');
-                          }
-                        }
-                        else if (['firstName', 'lastName', 'realstateName'].includes(searchBy)) {
-                          if (value.length >= 2) {
-                            debouncedOnSearch(value, searchBy);
-                          }
-                        }
+                      else if (value.length >= 3) {
+                        debouncedOnSearchNationalCode(value);
                       }
                     }}
-                    onFocus={() => {
-                      if (!searchBy?.length) {
-                        return document.getElementById('searchByField').focus(
-                        );
+                  />
+                </Form.Item>
+              </Col>
+              
+              <Col span={14}>
+                <Form.Item
+                  name={'token'}
+                  noStyle
+                >
+                  <Input
+                    placeholder={'جستجو با توکن...'}
+                    suffix={<SearchOutlined className="!text-gray-40" />}
+                    onChange={e => {
+                      const value = e?.target?.value;
+                      
+                      if (!value?.length) {
+                        setFilters(current => {
+                          const {token: _, ...rest} = current;
+                          
+                          return rest;
+                        });
+                      }
+                      else if (value.length >= 3) {
+                        debouncedOnSearchToken(value);
                       }
                     }}
                   />
@@ -216,7 +274,7 @@ const UsersTable = () => {
       
       <div className="bg-white my-[20px] py-[40px] px-[16px]">
         <Table
-          loading={isLoading || banUserIsLoading || activeUserIsLoading}
+          loading={isLoading || deactivateUserIsLoading || activeUserIsLoading}
           columns={columns}
           dataSource={users?.filter(user => user?.type !== 'admin')}
           bordered={false}
@@ -236,12 +294,16 @@ const UsersTable = () => {
         open={newUserModalOpen}
         onCancel={handleOnCloseNewUserModal}
         maskClosable={false}
-        title="ثبت نام کاربر جدید"
+        title={editUserId ? 'ویرایش کاربر' : 'ثبت نام کاربر جدید'}
         footer={null}
         className="!w-full md:!w-[85%] !top-[5vh]"
         destroyOnClose
       >
-        <NewUserForm onCancel={handleOnCloseNewUserModal} />
+        <SaveUserForm
+          handleCloseModal={handleOnCloseNewUserModal}
+          editUserId={editUserId}
+          editUserData={editUserData}
+        />
       </Modal>
     </>
   );
