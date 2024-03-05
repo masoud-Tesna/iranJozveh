@@ -33,8 +33,6 @@ export const useAxiosClient = ({type = 'JSON', customRequestHeader = {}}) => {
     async (error) => {
       const originalRequest = error.config; // save original request
       
-      console.log('error >>>', error?.response);
-      
       if (error?.response?.status === 401) {
         const newAccessToken = await handleRefreshToken(tokenInfo?.refreshToken);
         

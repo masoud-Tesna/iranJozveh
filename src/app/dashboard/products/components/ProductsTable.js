@@ -59,7 +59,7 @@ const ProductsTable = () => {
     {
       title: 'کد محصول',
       align: 'center',
-      dataIndex: 'productCode'
+      dataIndex: 'code'
     },
     {
       title: 'نام محصول',
@@ -153,7 +153,7 @@ const ProductsTable = () => {
         maskClosable={false}
         title={editProductId ? 'ویرایش محصول' : 'افزودن محصول جدید'}
         footer={null}
-        className="!w-full md:!w-[65%]"
+        className="!w-full md:!w-[65%] !top-[20px]"
         destroyOnClose
       >
         <SaveProductForm

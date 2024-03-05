@@ -129,6 +129,8 @@ const SaveProductForm = ({handleCloseModal, editProductId, editProductData}) => 
     }
   };
   
+  console.log('editProductData >>>', editProductData);
+  
   useEffect(() => {
     if (editProductId?.length) {
       formRef.setFieldsValue({
@@ -209,7 +211,7 @@ const SaveProductForm = ({handleCloseModal, editProductId, editProductData}) => 
                     }
                   ]);
                 }}
-                editFile={baseURL?._baseURL + '/api/public/products/pdf/' + editProductData?.pdf}
+                editFile={editProductData?.file ? baseURL?._baseURL + '/api/public/products/pdf/' + editProductData?.file : null}
                 showUploadList={false}
                 accept={'.pdf'}
                 beforeUpload={() => false}
@@ -246,7 +248,7 @@ const SaveProductForm = ({handleCloseModal, editProductId, editProductData}) => 
                     }
                   ]);
                 }}
-                editFile={baseURL?._baseURL + '/api/public/products/image/' + editProductData?.image}
+                editFile={editProductData?.image ? baseURL?._baseURL + '/api/public/products/image/' + editProductData?.image : null}
                 showUploadList={false}
                 accept={'.png, .jpg, .jpeg'}
                 beforeUpload={() => false}

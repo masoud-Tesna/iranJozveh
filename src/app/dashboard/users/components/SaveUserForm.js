@@ -7,7 +7,7 @@ import {NewUserZod} from '@/app/dashboard/users/schema/newUser';
 import {DeleteOutlined} from '@ant-design/icons';
 import {useQueryClient} from '@tanstack/react-query';
 
-const SaveUserForm = ({handleCloseModal, editUserId, editUserData}) => {
+const SaveUserForm = ({handleCloseModal, editUserId, editUserData, setUserToken, handleOpenTokenModal}) => {
   const [formRef] = Form.useForm();
   const request = useRequest();
   const queryClient = useQueryClient();
@@ -58,12 +58,18 @@ const SaveUserForm = ({handleCloseModal, editUserId, editUserData}) => {
         await updateCustomerRequest(values);
       }
       else {
-        await createCustomerRequest(values);
+        const res = await createCustomerRequest(values);
+        setUserToken(res?.response?.token);
       }
       
       await queryClient.refetchQueries({queryKey: ['users-list']});
       
+      if (!editUserId) {
+        await handleOpenTokenModal();
+      }
+      
       await handleCloseModal();
+      
     } catch (error) {
       const selectedProductsError = error?.errorFields?.find(item => item?.name[0] === 'selectedProducts');
       

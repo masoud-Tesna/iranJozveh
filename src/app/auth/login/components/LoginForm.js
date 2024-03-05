@@ -39,8 +39,6 @@ const LoginForm = () => {
       
       const loginResponse = await loginRequest(loginZod);
       
-      console.log('loginResponse >>>', loginResponse);
-      
       await handleChangeUserData(loginResponse?.response);
       
       if (loginResponse.response?.user?.type === 'admin') {

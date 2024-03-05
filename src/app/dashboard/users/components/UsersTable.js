@@ -15,6 +15,7 @@ import SaveUserForm from './SaveUserForm';
 import {truncatedMiddleText} from '@/utils/helpers';
 import {useAxiosClient} from '@/utils/axios/useAxiosClient';
 import {EditOutlined} from '@ant-design/icons';
+import UserToken from '@/app/dashboard/users/components/UserToken';
 
 const DatePicker = dynamic(() => import('@/templates/UI/DatePicker').then((mod) => mod.DatePicker), {ssr: false});
 
@@ -25,7 +26,8 @@ const UsersTable = () => {
   
   const [filters, setFilters] = useState({pageNumber: 1});
   const [newUserModalOpen, setNewUserModalOpen] = useState(false);
-  
+  const [newUserTokenModalOpen, setNewUserTokenModalOpen] = useState(false);
+  const [userToken, setUserToken] = useState('');
   const [editUserId, setEditUserId] = useState('');
   const [editUserData, setEditUserData] = useState({});
   
@@ -197,6 +199,11 @@ const UsersTable = () => {
     setNewUserModalOpen(false);
   };
   
+  const handleOnCloseTokenModal = () => {
+    setUserToken('');
+    setNewUserTokenModalOpen(false);
+  };
+  
   useEffect(() => {
     return () => {
       debouncedOnSearchNationalCode.cancel();
@@ -303,6 +310,23 @@ const UsersTable = () => {
           handleCloseModal={handleOnCloseNewUserModal}
           editUserId={editUserId}
           editUserData={editUserData}
+          setUserToken={setUserToken}
+          handleOpenTokenModal={() => setNewUserTokenModalOpen(true)}
+        />
+      </Modal>
+      
+      <Modal
+        open={newUserTokenModalOpen}
+        onCancel={handleOnCloseTokenModal}
+        maskClosable={false}
+        title={'توکن ورود کاربر'}
+        footer={null}
+        className="!w-full md:!w-[70%]"
+        destroyOnClose
+      >
+        <UserToken
+          handleCloseModal={handleOnCloseTokenModal}
+          token={userToken}
         />
       </Modal>
     </>

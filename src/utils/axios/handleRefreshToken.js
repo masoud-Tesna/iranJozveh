@@ -10,7 +10,7 @@ const handleRefreshToken = async (refreshToken) => {
     return Promise.resolve(result?.data?.response?.accessToken);
     
   } catch (error) {
-    return Promise.reject(new Error(error?.response?.data?.message || 'error in refresh token'));
+    return Promise.resolve(null);
   }
 };
 export default handleRefreshToken;

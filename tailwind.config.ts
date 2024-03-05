@@ -76,7 +76,8 @@ const config: Config = {
             8: '#E5E7EB',
             9: '#F5F7F9'
           },
-          black: '#0C0C0C'
+          black: '#0C0C0C',
+          black2: '#202020'
         }
       },
       fontSize: {
