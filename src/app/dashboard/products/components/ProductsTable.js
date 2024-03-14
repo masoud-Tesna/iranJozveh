@@ -141,7 +141,7 @@ const ProductsTable = () => {
             showSizeChanger: false,
             pageSize: 20,
             total: productsCount,
-            onChange: page => setFilters(current => ({...current, page}))
+            onChange: pageNumber => setFilters(current => ({...current, pageNumber}))
           }}
           rowKey={'_id'}
         />

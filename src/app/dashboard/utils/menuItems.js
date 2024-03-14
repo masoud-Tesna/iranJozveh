@@ -17,6 +17,6 @@ export const menuItems = [
     key: 'categories',
     label: 'دسته بندی ها',
     icon: <CollaborationOutlined className="!text-[25px]" />,
-    link: '/dashboard/categories'
+    link: ''
   }
 ];

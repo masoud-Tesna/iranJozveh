@@ -18,6 +18,7 @@ const LoginForm = () => {
   
   const nationalCodeWatch = Form.useWatch('nationalCode', formRef);
   
+/*
   useEffect(() => {
     formRef.setFields([
       {
@@ -27,6 +28,7 @@ const LoginForm = () => {
       }
     ]);
   }, [nationalCodeWatch]);
+*/
   
   const {mutateAsync: loginRequest} = request.useMutation({
     url: '/api/v1/auth/login',
@@ -60,7 +62,7 @@ const LoginForm = () => {
             name={'nationalCode'}
             rules={[handleCreateAntdZodValidator(LoginZod)]}
           >
-            <Input placeholder={'کد ملی'} maxLength={10} />
+            <Input placeholder={'کد ملی'} />
           </Form.Item>
           
           <Form.Item
