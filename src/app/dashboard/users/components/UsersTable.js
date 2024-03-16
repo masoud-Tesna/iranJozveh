@@ -148,9 +148,9 @@ const UsersTable = () => {
     },
     {
       title: 'تاریخ ثبت نام',
-      dataIndex: 'registerationDate',
-      render: (registerationDate) => new DateObject({
-        date: registerationDate,
+      dataIndex: 'createdAt',
+      render: (createdAt) => new DateObject({
+        date: createdAt,
         calendar: gregorian,
         locale: gregorian_en
       }).convert(persian).format('YYYY/MM/DD')
@@ -291,7 +291,7 @@ const UsersTable = () => {
             showSizeChanger: false,
             pageSize: 20,
             total: usersCount,
-            onChange: page => setFilters(current => ({...current, page}))
+            onChange: pageNumber => setFilters(current => ({...current, pageNumber}))
           }}
           rowKey={'_id'}
         />

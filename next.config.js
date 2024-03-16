@@ -5,9 +5,8 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'http',
-        hostname: '62.60.210.125',
-        port: '3003'
+        protocol: 'https',
+        hostname: 'esapp.ir'
       }
     ]
   },
