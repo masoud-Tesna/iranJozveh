@@ -1,3 +1,3 @@
-export {DatePicker} from './DatePicker';
-export {TransitionsComponent} from './TransitionsComponent';
-export {Upload} from './Upload';
+export {DatePicker} from './date-picker';
+export {TransitionsComponent} from './transitions-component';
+export {Upload} from './upload';

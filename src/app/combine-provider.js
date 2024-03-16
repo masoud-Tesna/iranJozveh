@@ -9,7 +9,7 @@ import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {AntdRegistry} from '@ant-design/nextjs-registry';
-import {AuthProvider} from '@/app/context/auth/AuthContext';
+import {AuthProvider} from '@/app/context/auth/auth-context';
 
 const CombineProvider = ({children}) => {
   

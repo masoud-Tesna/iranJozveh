@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import {Dropdown, Space} from 'antd';
 import {DownOutlined} from '@ant-design/icons';
-import {useAuth} from '@/app/context/auth/AuthContext';
+import {useAuth} from '@/app/context/auth/auth-context';
 
 const Header = () => {
   const {handleLogout} = useAuth();

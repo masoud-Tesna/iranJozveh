@@ -2,33 +2,31 @@
 
 import {TransitionsComponent} from '@/templates/UI';
 import {LoginZod} from '@/app/auth/login/schema/login';
-import {Button, Form, Input} from 'antd';
-import {FC, useEffect} from 'react';
-import {useHandleLogin} from '@/app/auth/login/utils/useHandleLogin';
+import {Button, Form as AntdForm, Input} from 'antd';
 import {handleCreateAntdZodValidator} from '@/utils/helpers';
 import {useRequest} from '@/utils/useRequest';
-import {useAuth} from '@/app/context/auth/AuthContext';
+import {useAuth} from '@/app/context/auth/auth-context';
 import {useRouter} from 'next/navigation';
 
-const LoginForm = () => {
-  const [formRef] = Form.useForm();
+const Form = () => {
+  const [formRef] = AntdForm.useForm();
   const {handleChangeUserData} = useAuth();
   const router = useRouter();
   const request = useRequest();
   
-  const nationalCodeWatch = Form.useWatch('nationalCode', formRef);
+  const nationalCodeWatch = AntdForm.useWatch('nationalCode', formRef);
   
-/*
-  useEffect(() => {
-    formRef.setFields([
-      {
-        name: 'nationalCode',
-        value: nationalCodeWatch?.replace(/\D/g, ''),
-        errors: []
-      }
-    ]);
-  }, [nationalCodeWatch]);
-*/
+  /*
+   useEffect(() => {
+   formRef.setFields([
+   {
+   name: 'nationalCode',
+   value: nationalCodeWatch?.replace(/\D/g, ''),
+   errors: []
+   }
+   ]);
+   }, [nationalCodeWatch]);
+   */
   
   const {mutateAsync: loginRequest} = request.useMutation({
     url: '/api/v1/auth/login',
@@ -52,25 +50,25 @@ const LoginForm = () => {
   };
   
   return (
-    <Form
+    <AntdForm
       form={formRef}
       onFinish={handleOnFinishLogin}
     >
       <TransitionsComponent>
         <TransitionsComponent.Motion id={'loginPage'}>
-          <Form.Item
+          <AntdForm.Item
             name={'nationalCode'}
             rules={[handleCreateAntdZodValidator(LoginZod)]}
           >
             <Input placeholder={'کد ملی'} />
-          </Form.Item>
+          </AntdForm.Item>
           
-          <Form.Item
+          <AntdForm.Item
             name={'password'}
             rules={[handleCreateAntdZodValidator(LoginZod)]}
           >
             <Input.Password placeholder={'رمز عبور'} />
-          </Form.Item>
+          </AntdForm.Item>
         </TransitionsComponent.Motion>
       </TransitionsComponent>
       
@@ -82,8 +80,8 @@ const LoginForm = () => {
       >
         ورود
       </Button>
-    </Form>
+    </AntdForm>
   );
 };
 
-export default LoginForm;
+export default Form;

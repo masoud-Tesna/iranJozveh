@@ -1,5 +1,5 @@
 /** @type {import('antd').ThemeConfig} */
-import {tailwindTheme} from '@/theme/tailwindTheme';
+import {tailwindTheme} from '@/theme/tailwind-theme';
 
 const antdTheme = {
   token: {

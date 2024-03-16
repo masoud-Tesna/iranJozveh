@@ -1,6 +1,6 @@
 import {Divider} from 'antd';
-import LoginForm from '@/app/auth/login/components/LoginForm';
-import Spin from '@/app/auth/login/components/Spin';
+import Form from '@/app/auth/login/components/form';
+import Spin from '@/app/auth/login/components/spin';
 
 const Login = () => {
   return (
@@ -20,7 +20,7 @@ const Login = () => {
         </div>
         
         <div>
-          <LoginForm />
+          <Form />
         </div>
       </div>
     </Spin>

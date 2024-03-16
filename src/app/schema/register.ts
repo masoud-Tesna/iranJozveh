@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { setInputRule } from '@/utils/setInputRule';
 import { PasswordZod } from '@/app/schema/password';
-import { NationalCodeZod } from '@/app/schema/nationalCode';
-import { MobileNumberZod } from '@/app/schema/mobileNumber';
+import { NationalCodeZod } from '@/app/schema/national-code';
+import { MobileNumberZod } from '@/app/schema/mobile-number';
 
 export const RegisterZod = z.object({
   firstName: z.string({ required_error: setInputRule('requiredInput', { inputName: 'نام' }) }),

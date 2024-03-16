@@ -7,13 +7,13 @@ import {Button, Col, Form, Input, Modal, Row, Select, Switch, Table} from 'antd'
 import {SearchOutlined} from '@/templates/icons';
 import debounce from 'lodash.debounce';
 import dynamic from 'next/dynamic';
-import SaveProductForm from './SaveProductForm';
+import SaveProductForm from './save-product-form';
 import {formatNumber} from '@/utils/helpers';
 import baseURL from '@/utils/axios/baseURL';
 import {EditOutlined, FilePdfOutlined} from '@ant-design/icons';
 import Image from 'next/image';
 
-const DatePicker = dynamic(() => import('@/templates/UI/DatePicker').then((mod) => mod.DatePicker), {ssr: false});
+const DatePicker = dynamic(() => import('@/templates/UI/date-picker').then((mod) => mod.DatePicker), {ssr: false});
 
 const ProductsTable = () => {
   const [formRef] = Form.useForm();

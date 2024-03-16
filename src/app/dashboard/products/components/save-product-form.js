@@ -1,9 +1,9 @@
 import {Button, Col, Form, Input, Row, Select, Space, Spin} from 'antd';
 import {handleCreateAntdZodValidator, setInputRule} from '@/utils/helpers';
-import {NewProductZod} from '@/app/dashboard/products/schema/newProduct';
+import {NewProductZod} from '@/app/dashboard/products/schema/new-product';
 import {Upload} from '@/templates/UI';
 import baseURL from '@/utils/axios/baseURL';
-import {useAuth} from '@/app/context/auth/AuthContext';
+import {useAuth} from '@/app/context/auth/auth-context';
 import {useRequest} from '@/utils/useRequest';
 import {useQueryClient} from '@tanstack/react-query';
 import {useEffect} from 'react';

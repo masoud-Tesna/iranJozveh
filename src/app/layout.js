@@ -1,7 +1,7 @@
 import './globals.css';
 import 'react-loading-skeleton/dist/skeleton.css';
-import CombineProvider from '@/app/CombineProvider';
-import AntdLayout from '@/app/components/AntdLayout';
+import CombineProvider from '@/app/combine-provider';
+import AntdLayout from '@/app/components/antd-layout';
 
 export const metadata = {
   title: 'new APP',

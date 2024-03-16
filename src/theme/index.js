@@ -1,3 +1,3 @@
-export {antdTheme} from './antdTheme';
+export {antdTheme} from './antd-theme';
 
-export {tailwindTheme} from './tailwindTheme';
+export {tailwindTheme} from './tailwind-theme';

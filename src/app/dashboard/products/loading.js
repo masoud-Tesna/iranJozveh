@@ -1,7 +1,5 @@
-import DashboardPageIsLoading from '@/app/dashboard/components/DashboardPageIsLoading';
+import DashboardPageLoading from '@/app/dashboard/components/dashboard-page-loading';
 
-const Loading = () => {
-    return <DashboardPageIsLoading />;
-};
+const Loading = () => <DashboardPageLoading />;
 
 export default Loading;

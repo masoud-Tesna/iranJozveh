@@ -11,13 +11,13 @@ import {Button, Col, Form, Input, Modal, Row, Select, Switch, Table, Typography}
 import {SearchOutlined} from '@/templates/icons';
 import debounce from 'lodash.debounce';
 import dynamic from 'next/dynamic';
-import SaveUserForm from './SaveUserForm';
+import SaveUserForm from './save-user-form';
 import {truncatedMiddleText} from '@/utils/helpers';
 import {useAxiosClient} from '@/utils/axios/useAxiosClient';
 import {EditOutlined} from '@ant-design/icons';
-import UserToken from '@/app/dashboard/users/components/UserToken';
+import UserToken from '@/app/dashboard/users/components/user-token';
 
-const DatePicker = dynamic(() => import('@/templates/UI/DatePicker').then((mod) => mod.DatePicker), {ssr: false});
+const DatePicker = dynamic(() => import('@/templates/UI/date-picker').then((mod) => mod.DatePicker), {ssr: false});
 
 const UsersTable = () => {
   const [formRef] = Form.useForm();

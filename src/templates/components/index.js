@@ -1,1 +1,1 @@
-export {AuthSkeleton} from './AuthSkeleton';
+export {AuthSkeleton} from './auth-skeleton';

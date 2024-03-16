@@ -1,5 +1,5 @@
-import PageDetails from '@/app/dashboard/components/PageDetails';
-import ProductsTable from './components/ProductsTable';
+import PageDetails from '@/app/dashboard/components/page-details';
+import ProductsTable from './components/products-table';
 
 const ProductsPage = () => {
   return (

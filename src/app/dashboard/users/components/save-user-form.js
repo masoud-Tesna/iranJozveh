@@ -3,14 +3,18 @@ import {useRequest} from '@/utils/useRequest';
 import {useEffect, useMemo, useState} from 'react';
 import debounce from 'lodash.debounce';
 import {handleCreateAntdZodValidator} from '@/utils/helpers';
-import {NewUserZod} from '@/app/dashboard/users/schema/newUser';
+import {NewUserZod} from '@/app/dashboard/users/schema/new-user';
 import {DeleteOutlined} from '@ant-design/icons';
 import {useQueryClient} from '@tanstack/react-query';
+import starkString from 'starkstring';
 
 const SaveUserForm = ({handleCloseModal, editUserId, editUserData, setUserToken, handleOpenTokenModal}) => {
   const [formRef] = Form.useForm();
   const request = useRequest();
   const queryClient = useQueryClient();
+  
+  const nationalCodeWatch = Form.useWatch('nationalCode', formRef);
+  const mobileNumberWatch = Form.useWatch('mobileNumber', formRef);
   
   const [searchProducts, setSearchProducts] = useState('');
   
@@ -93,6 +97,26 @@ const SaveUserForm = ({handleCloseModal, editUserId, editUserData, setUserToken,
       });
     }
   }, [editUserId]);
+  
+  useEffect(() => {
+    formRef.setFields([
+      {
+        name: 'nationalCode',
+        value: starkString(nationalCodeWatch).englishNumber().parseNumber().toString(),
+        errors: []
+      }
+    ]);
+  }, [nationalCodeWatch]);
+  
+  useEffect(() => {
+    formRef.setFields([
+      {
+        name: 'mobileNumber',
+        value: starkString(mobileNumberWatch).englishNumber().parseNumber().toString(),
+        errors: []
+      }
+    ]);
+  }, [mobileNumberWatch]);
   
   return (
     <Spin spinning={createCustomerIsLoading || updateCustomerIsLoading}>

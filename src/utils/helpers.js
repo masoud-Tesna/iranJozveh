@@ -3,6 +3,7 @@ import {DateObject} from 'react-multi-date-picker';
 import persian from 'react-date-object/calendars/persian';
 import gregorian from 'react-date-object/calendars/gregorian';
 import messages from './inputRulesMessage';
+
 // TODO: unComment before using function
 export const formatNumber = number => {
   return number.toLocaleString(undefined, {maximumFractionDigits: 0});

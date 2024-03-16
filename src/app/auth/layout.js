@@ -8,7 +8,7 @@ import {AuthSkeleton} from '@/templates/components';
 import appLogo from '/public/images/logo.svg';
 import logoWithTransparent from '/public/images/logoWithTransparent.svg';
 import {useRouter} from 'next/navigation';
-import {useAuth} from '@/app/context/auth/AuthContext';
+import {useAuth} from '@/app/context/auth/auth-context';
 
 const AuthLayout = ({children}) => {
   const router = useRouter();

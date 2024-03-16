@@ -3,7 +3,7 @@
 import {Layout} from 'antd';
 import logo from '/public/logo.svg';
 import Image from 'next/image';
-import SidebarMenu from './SidebarMenu';
+import SidebarMenu from './sidebar-menu';
 
 const Sidebar = () => {
   return (

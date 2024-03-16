@@ -1,6 +1,6 @@
 'use client';
 
-import PageTemplate from './PageTemplate';
+import PageTemplate from './page-template';
 
 const DashboardLayout = ({children}) => {
   return (

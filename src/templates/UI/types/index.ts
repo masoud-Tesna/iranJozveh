@@ -1,2 +1,2 @@
-export type { TMotion, CompoundedTransitionsComponent } from './transitionsComponent';
-export type { TUploadProps } from './antdUpload';
+export type { TMotion, CompoundedTransitionsComponent } from './transitions-component';
+export type { TUploadProps } from './antd-upload';

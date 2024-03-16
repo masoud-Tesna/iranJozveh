@@ -1,11 +1,11 @@
 'use client';
 
 import {Col, Layout, Row, Skeleton} from 'antd';
-import Header from '@/app/dashboard/components/Header';
-import Sidebar from '@/app/dashboard/components/Sidebar';
+import Header from '@/app/dashboard/components/header';
+import Sidebar from '@/app/dashboard/components/sidebar';
 import {useEffect, useState} from 'react';
-import DashboardPageIsLoading from './components/DashboardPageIsLoading';
-import {useAuth} from '@/app/context/auth/AuthContext';
+import DashboardPageLoading from './components/dashboard-page-loading';
+import {useAuth} from '@/app/context/auth/auth-context';
 import {redirect, useRouter} from 'next/navigation';
 
 const PageTemplate = ({children}) => {
@@ -36,7 +36,7 @@ const PageTemplate = ({children}) => {
               </Col>
               
               <Col flex={'1 1'}>
-                <DashboardPageIsLoading />
+                <DashboardPageLoading />
               </Col>
             </Row>
           </Layout.Content>
