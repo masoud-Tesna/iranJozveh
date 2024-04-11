@@ -22,7 +22,7 @@ const SaveUserForm = ({handleCloseModal, editUserId, editUserData, setUserToken,
     data: searchedProductsData,
     isLoading: searchedProductsIsLoading
   } = request.useQuery({
-    url: '/v1/product',
+    url: '/api/v1/product',
     params: {
       pageNumber: 1,
       search: searchProducts
@@ -40,12 +40,12 @@ const SaveUserForm = ({handleCloseModal, editUserId, editUserData, setUserToken,
   };
   
   const {isPending: createCustomerIsLoading, mutateAsync: createCustomerRequest} = request.useMutation({
-    url: '/v1/customer',
+    url: '/api/v1/customer',
     mutationKey: ['createCustomer']
   });
   
   const {isPending: updateCustomerIsLoading, mutateAsync: updateCustomerRequest} = request.useMutation({
-    url: `/v1/customer/${editUserId}`,
+    url: `/api/v1/customer/${editUserId}`,
     method: 'patch',
     mutationKey: ['updateCustomer']
   });
