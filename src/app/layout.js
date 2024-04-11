@@ -4,8 +4,8 @@ import CombineProvider from '@/app/combine-provider';
 import AntdLayout from '@/app/components/antd-layout';
 
 export const metadata = {
-  title: 'new APP',
-  description: 'New App'
+  title: 'EsApp',
+  description: 'EsApp Dashboard'
 };
 
 const RootLayout = ({children}) => {

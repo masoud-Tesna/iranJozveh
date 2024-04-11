@@ -29,7 +29,7 @@ const ProductsTable = () => {
   const debouncedOnSearch = useMemo(search => debounce(handleOnChangeSearchFilter, 500), []);
   
   const {isLoading, data: productsData} = request.useQuery({
-    url: '/api/v1/product',
+    url: '/v1/product',
     params: filters,
     queryKey: ['products-list', filters]
   });
@@ -50,7 +50,7 @@ const ProductsTable = () => {
       dataIndex: 'image',
       render: (image) => (
         image ?
-          <Image src={baseURL?._baseURL + '/api/public/products/image/' + image} alt="" width={40} height={40} /> :
+          <Image src={baseURL?._baseURL + '/public/products/image/' + image} alt="" width={40} height={40} /> :
           <span className="p-8 bg-neutral-gray-4 border-solid border-[.5px] border-neutral-gray-8 rounded-full">
             <FilePdfOutlined className="!text-primary !text-[25px]" />
           </span>

@@ -125,7 +125,6 @@
   }
 }
 
-
 .--avatar-uploader-formItem {
   
   .--avatar-uploader {
@@ -175,5 +174,16 @@
   
   .ant-form-item-explain-error {
     @apply text-captionMd;
+  }
+}
+
+.--pageSection {
+  @apply min-h-min;
+}
+
+.--pageContentFull {
+  &,
+  & > .ant-spin-container {
+    @apply min-h-full flex-1 flex flex-col
   }
 }

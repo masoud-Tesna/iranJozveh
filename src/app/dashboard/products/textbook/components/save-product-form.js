@@ -1,6 +1,6 @@
 import {Button, Col, Form, Input, Row, Select, Space, Spin} from 'antd';
 import {handleCreateAntdZodValidator, setInputRule} from '@/utils/helpers';
-import {NewProductZod} from '@/app/dashboard/products/schema/new-product';
+import {NewProductZod} from '@/app/dashboard/products/textbook/schema/new-product';
 import {Upload} from '@/templates/UI';
 import baseURL from '@/utils/axios/baseURL';
 import {useAuth} from '@/app/context/auth/auth-context';
@@ -23,7 +23,7 @@ const SaveProductForm = ({handleCloseModal, editProductId, editProductData}) => 
           name: 'image',
           errors: [
             setInputRule(
-              'imageUploadTypeError',
+              'imageUploadTypesError',
               {inputName: 'تصویر محصول', types: 'JPG/PNG'}
             )
           ]
@@ -98,12 +98,12 @@ const SaveProductForm = ({handleCloseModal, editProductId, editProductData}) => 
   const handleDeletePdf = async () => formRef.setFieldsValue({file: undefined});
   
   const {isPending: createProductIsLoading, mutateAsync: createProductRequest} = request.useMutation({
-    url: '/api/v1/product/textbook',
+    url: '/v1/product/textbook',
     mutationKey: ['createProduct']
   });
   
   const {isPending: updateProductIsLoading, mutateAsync: updateProductRequest} = request.useMutation({
-    url: `/api/v1/product/textbook/${editProductId}`,
+    url: `/v1/product/textbook/${editProductId}`,
     method: 'patch',
     mutationKey: ['updateProduct']
   });
@@ -146,17 +146,13 @@ const SaveProductForm = ({handleCloseModal, editProductId, editProductData}) => 
       <Form
         form={formRef}
         layout="vertical"
+        initialValues={{
+          category: 'textbook'
+        }}
       >
+        <Form.Item name={'category'} initialValue="textbook" hidden />
+        
         <Row gutter={8}>
-          <Col span={12}>
-            <Form.Item
-              name={'category'}
-              rules={[handleCreateAntdZodValidator(NewProductZod)]}
-            >
-              <Select placeholder="دسته محصول" options={[{label: 'درس نامه', value: 'textbook'}]} />
-            </Form.Item>
-          </Col>
-          
           <Col span={12}>
             <Form.Item
               name={'name'}
@@ -202,7 +198,7 @@ const SaveProductForm = ({handleCloseModal, editProductId, editProductData}) => 
                 name="pdf"
                 asPdfFile
                 listType="picture-card"
-                action={'/api/v1/product/textbook/upload/pdf'}
+                action={'/v1/product/textbook/upload/pdf'}
                 handleReturnResponse={uploadResponse => {
                   formRef.setFields([
                     {
@@ -211,7 +207,7 @@ const SaveProductForm = ({handleCloseModal, editProductId, editProductData}) => 
                     }
                   ]);
                 }}
-                editFile={editProductData?.file ? baseURL?._baseURL + '/api/public/products/pdf/' + editProductData?.file : null}
+                editFile={editProductData?.file ? baseURL?._baseURL + '/public/products/pdf/' + editProductData?.file : null}
                 showUploadList={false}
                 accept={'.pdf'}
                 beforeUpload={() => false}
@@ -239,7 +235,7 @@ const SaveProductForm = ({handleCloseModal, editProductId, editProductData}) => 
               <Upload
                 name="image"
                 listType="picture-card"
-                action={'/api/v1/product/upload/image'}
+                action={'/v1/product/upload/image'}
                 handleReturnResponse={uploadResponse => {
                   formRef.setFields([
                     {
@@ -248,7 +244,7 @@ const SaveProductForm = ({handleCloseModal, editProductId, editProductData}) => 
                     }
                   ]);
                 }}
-                editFile={editProductData?.image ? baseURL?._baseURL + '/api/public/products/image/' + editProductData?.image : null}
+                editFile={editProductData?.image ? baseURL?._baseURL + '/public/products/image/' + editProductData?.image : null}
                 showUploadList={false}
                 accept={'.png, .jpg, .jpeg'}
                 beforeUpload={() => false}

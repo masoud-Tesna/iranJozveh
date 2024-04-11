@@ -40,7 +40,7 @@ const UsersTable = () => {
   const debouncedOnSearchToken = useMemo(search => debounce(handleOnChangeTokenFilter, 500), []);
   
   const {isLoading, data: usersData} = request.useQuery({
-    url: '/api/v1/user',
+    url: '/v1/user',
     params: filters,
     queryKey: ['users-list', filters]
   });
@@ -54,7 +54,7 @@ const UsersTable = () => {
     const result = await axiosClient.request(
       {
         method: 'patch',
-        url: `/api/v1/user/activate/${userId}`
+        url: `/v1/user/activate/${userId}`
       }
     );
     return result?.data;
@@ -64,7 +64,7 @@ const UsersTable = () => {
     const result = await axiosClient.request(
       {
         method: 'patch',
-        url: `/api/v1/user/deactivate/${userId}`
+        url: `/v1/user/deactivate/${userId}`
       }
     );
     return result?.data;

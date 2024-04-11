@@ -29,7 +29,7 @@ const Form = () => {
    */
   
   const {mutateAsync: loginRequest} = request.useMutation({
-    url: '/api/v1/auth/login',
+    url: '/v1/auth/login',
     mutationKey: ['auth', 'signIn']
   });
   

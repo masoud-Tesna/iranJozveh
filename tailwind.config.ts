@@ -46,7 +46,8 @@ const config: Config = {
         3: '0 6px 12px 0 rgba(0, 0, 0, .12)',
         4: '0 10px 25px 0 rgba(0, 0, 0, .30) inset',
         8: '0px 1px 0px 0px #E2E8F0',
-        9: '-2px 0px 5px 0px rgba(53, 53, 53, 0.03) inset'
+        9: '-2px 0px 5px 0px rgba(53, 53, 53, 0.03) inset',
+        10: '0 1px 0 0 #F4F4FF'
       },
       colors: {
         primary: '#6251DD',
@@ -61,7 +62,8 @@ const config: Config = {
           70: '#6D6D6D',
           80: '#656565',
           90: '#F5F7F9',
-          100: '#090937'
+          100: '#090937',
+          200: '#F4F4FF'
         },
         neutral: {
           white: '#FFFFFF',

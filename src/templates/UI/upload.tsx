@@ -8,7 +8,7 @@ import { getBase64 } from '@/utils/helpers';
 import { LoadingOutlined, FilePdfOutlined } from '@ant-design/icons';
 import classNames from 'classnames';
 import { TUploadProps } from '@/templates/UI/types';
-import { TrashFilled } from '@/templates/icons';
+import { AndroidOutlined, TrashFilled } from '@/templates/icons';
 import { useRequest } from '@/utils/useRequest';
 
 export const Upload: FC<TUploadProps> = ({
@@ -18,6 +18,7 @@ export const Upload: FC<TUploadProps> = ({
   handleReturnResponse,
   deleteLogo = false,
   asPdfFile = false,
+  asApkFile = false,
   beforeUploadFile,
   editFile,
   children,
@@ -107,11 +108,14 @@ export const Upload: FC<TUploadProps> = ({
                 asPdfFile ?
                   <FilePdfOutlined className="!text-[70px] !text-primary" />
                   :
-                  <Image
-                    src={ imageUrl }
-                    { ...imageProps }
-                    alt={ imageProps?.alt || '' }
-                  />
+                  asApkFile ?
+                    <AndroidOutlined className="!text-[70px] !text-primary" />
+                    :
+                    <Image
+                      src={ imageUrl }
+                      { ...imageProps }
+                      alt={ imageProps?.alt || '' }
+                    />
               ) :
               uploadButton }
             

@@ -10,6 +10,7 @@ export type TUploadProps = UploadProps & {
   handleDeleteLogo?: () => Promise<void>,
   deleteLogo?: boolean,
   asPdfFile?: boolean,
+  asApkFile?: boolean,
   editFile?: string,
   beforeUploadFile: (file: any) => Promise<void>;
 }

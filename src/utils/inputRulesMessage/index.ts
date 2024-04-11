@@ -67,9 +67,13 @@ const rulesMessage = {
     vars: ['inputName', 'length'],
     message: '{{inputName}} باید حداکثر {{length}} ریال باشد'
   },
-  imageUploadTypeError: {
+  imageUploadTypesError: {
     vars: ['inputName', 'types'],
     message: '{{inputName}} باید یکی از فرمت های ({{types}}) باشد'
+  },
+  imageUploadTypeError: {
+    vars: ['inputName', 'types'],
+    message: '{{inputName}} باید فرمت ({{types}}) باشد'
   },
   imageUploadRequired: {
     vars: ['inputName'],

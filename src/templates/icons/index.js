@@ -5,3 +5,8 @@ export {SearchOutlined} from './SearchOutlined';
 export {CalendarDateOutlined} from './CalendarDateOutlined';
 export {TrashOutlined} from './TrashOutlined';
 export {TrashFilled} from './TrashFilled';
+export {ListDiscFilled} from './list-disc-filled';
+export {AndroidOutlined} from './android-outlined';
+export {DownloadOutlined} from './download-outlined';
+export {AddCircleFilled} from './add-circle-filled';
+export {MinusCircleFilled} from './minus-circle-filled';

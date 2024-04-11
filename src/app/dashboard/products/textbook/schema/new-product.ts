@@ -5,7 +5,7 @@ import { FullNameZod } from '@/app/schema/full-name';
 import { setInputRule } from '@/utils/setInputRule';
 
 export const NewProductZod = z.object({
-  category: z.string({ required_error: setInputRule('requiredSelectBox', { inputName: 'دسته محصول' }) }),
+  category: z.string(),
   name: z.string({ required_error: setInputRule('requiredInput', { inputName: 'نام محصول' }) })
   .min(2, setInputRule('minLength', { inputName: 'نام محصول', length: 2 })),
   pageCount: z.string({ required_error: setInputRule('requiredInput', { inputName: 'تعداد صفحات' }) }),
