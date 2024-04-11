@@ -22,7 +22,7 @@ const SaveUserForm = ({handleCloseModal, editUserId, editUserData, setUserToken,
     data: searchedProductsData,
     isLoading: searchedProductsIsLoading
   } = request.useQuery({
-    url: '/api/v1/product',
+    url: '/v1/product',
     params: {
       pageNumber: 1,
       search: searchProducts
@@ -40,12 +40,12 @@ const SaveUserForm = ({handleCloseModal, editUserId, editUserData, setUserToken,
   };
   
   const {isPending: createCustomerIsLoading, mutateAsync: createCustomerRequest} = request.useMutation({
-    url: '/api/v1/customer',
+    url: '/v1/customer',
     mutationKey: ['createCustomer']
   });
   
   const {isPending: updateCustomerIsLoading, mutateAsync: updateCustomerRequest} = request.useMutation({
-    url: `/api/v1/customer/${editUserId}`,
+    url: `/v1/customer/${editUserId}`,
     method: 'patch',
     mutationKey: ['updateCustomer']
   });
@@ -99,23 +99,28 @@ const SaveUserForm = ({handleCloseModal, editUserId, editUserData, setUserToken,
   }, [editUserId]);
   
   useEffect(() => {
-    formRef.setFields([
-      {
-        name: 'nationalCode',
-        value: starkString(nationalCodeWatch).englishNumber().parseNumber().toString(),
-        errors: []
-      }
-    ]);
+    if (nationalCodeWatch?.length) {
+      formRef.setFields([
+        {
+          name: 'nationalCode',
+          value: starkString(nationalCodeWatch).englishNumber().parseNumber().toString(),
+          errors: []
+        }
+      ]);
+    }
+    
   }, [nationalCodeWatch]);
   
   useEffect(() => {
-    formRef.setFields([
-      {
-        name: 'mobileNumber',
-        value: starkString(mobileNumberWatch).englishNumber().parseNumber().toString(),
-        errors: []
-      }
-    ]);
+    if (mobileNumberWatch?.length) {
+      formRef.setFields([
+        {
+          name: 'mobileNumber',
+          value: starkString(mobileNumberWatch).englishNumber().parseNumber().toString(),
+          errors: []
+        }
+      ]);
+    }
   }, [mobileNumberWatch]);
   
   return (
