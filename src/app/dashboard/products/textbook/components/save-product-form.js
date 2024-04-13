@@ -24,7 +24,7 @@ const SaveProductForm = ({handleCloseModal, editProductId, editProductData}) => 
           errors: [
             setInputRule(
               'imageUploadTypesError',
-              {inputName: 'تصویر محصول', types: 'JPG/PNG'}
+              {inputName: 'تصویر درسنامه', types: 'JPG/PNG'}
             )
           ]
         }
@@ -49,7 +49,7 @@ const SaveProductForm = ({handleCloseModal, editProductId, editProductData}) => 
           errors: [
             setInputRule(
               'imageUploadSizeError',
-              {inputName: 'تصویر محصول', size: '500 کیلوبایت'}
+              {inputName: 'تصویر درسنامه', size: '500 کیلوبایت'}
             )
           ]
         }
@@ -98,7 +98,7 @@ const SaveProductForm = ({handleCloseModal, editProductId, editProductData}) => 
   const handleDeletePdf = async () => formRef.setFieldsValue({file: undefined});
   
   const {isPending: createProductIsLoading, mutateAsync: createProductRequest} = request.useMutation({
-    url: '/v1/product/textbook',
+    url: '/v1/textbookk',
     mutationKey: ['createProduct']
   });
   
@@ -158,7 +158,7 @@ const SaveProductForm = ({handleCloseModal, editProductId, editProductData}) => 
               name={'name'}
               rules={[handleCreateAntdZodValidator(NewProductZod)]}
             >
-              <Input placeholder="نام محصول" maxLength={30} />
+              <Input placeholder="نام درسنامه" maxLength={30} />
             </Form.Item>
           </Col>
           
@@ -270,7 +270,7 @@ const SaveProductForm = ({handleCloseModal, editProductId, editProductData}) => 
               </Button>
               
               <Button type="primary" className="w-[176px]" onClick={handleOnFinishForm}>
-                {editProductId ? 'ویرایش محصول' : 'ایجاد محصول'}
+                {editProductId ? 'ویرایش درسنامه' : 'ایجاد درسنامه'}
               </Button>
             </Space>
           </Col>

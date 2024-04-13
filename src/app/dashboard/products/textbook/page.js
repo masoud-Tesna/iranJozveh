@@ -5,7 +5,7 @@ const ProductsPage = () => {
   return (
     <>
       <PageDetails>
-        لیست محصولات
+        لیست درسنامه ها
       </PageDetails>
       
       <div className="px-[3%]">

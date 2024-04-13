@@ -57,12 +57,12 @@ const ProductsTable = () => {
       )
     },
     {
-      title: 'کد محصول',
+      title: 'کد درسنامه',
       align: 'center',
       dataIndex: 'code'
     },
     {
-      title: 'نام محصول',
+      title: 'نام درسنامه',
       align: 'center',
       dataIndex: 'name'
     },
@@ -123,7 +123,7 @@ const ProductsTable = () => {
           
           <Col>
             <Button type={'primary'} onClick={() => setNewProductModalOpen(true)}>
-              افزودن محصول جدید
+              افزودن درسنامه جدید
             </Button>
           </Col>
         </Row>
@@ -151,7 +151,7 @@ const ProductsTable = () => {
         open={newProductModalOpen}
         onCancel={handleOnCloseNewProductModal}
         maskClosable={false}
-        title={editProductId ? 'ویرایش محصول' : 'افزودن محصول جدید'}
+        title={editProductId ? 'ویرایش درسنامه' : 'افزودن درسنامه جدید'}
         footer={null}
         className="!w-full md:!w-[65%] !top-[20px]"
         destroyOnClose
