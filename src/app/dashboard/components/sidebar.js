@@ -15,7 +15,7 @@ const Sidebar = () => {
       <div className="text-center mb-[16px]">
         <Image
           src={logo}
-          alt="Hirad"
+          alt="esApp"
           priority
           className="max-h-[63px]"
         />
