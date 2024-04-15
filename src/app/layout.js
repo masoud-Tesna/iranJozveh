@@ -12,7 +12,7 @@ const RootLayout = ({children}) => {
   return (
     <html lang="fa">
     <body className={'!font-samim'}>
-    <div className="--hiradApp h-full">
+    <div className="--esApp h-full">
       <CombineProvider>
         <AntdLayout>
           {children}
