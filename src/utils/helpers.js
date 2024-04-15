@@ -6,7 +6,7 @@ import messages from './inputRulesMessage';
 
 // TODO: unComment before using function
 export const formatNumber = number => {
-  return number.toLocaleString(undefined, {maximumFractionDigits: 0});
+  return number?.toLocaleString(undefined, {maximumFractionDigits: 0});
 };
 
 // TODO: unComment before using function
@@ -105,20 +105,20 @@ export const convertDatePicker = (date, format = 'YYYY/MM/DD', local = 'fa') => 
   return (toEnDigit(dateConvert));
 };
 
-export const setInputRule = (key, vars) => {
-  const argsKeys = vars ? Object.keys(vars) : [];
-  
-  let messageText = messages[key].message;
-  
-  if (messageText && argsKeys.length > 0) {
-    for (const [key, val] of Object.entries(vars)) {
-      const pattern = new RegExp(`{{${key}}}`, 'g');
-      messageText = messageText.replace(pattern, val?.toString() || '');
-    }
-  }
-  
-  return messageText || key;
-};
+/*export const setInputRule = (key, vars) => {
+ const argsKeys = vars ? Object.keys(vars) : [];
+ 
+ let messageText = messages[key].message;
+ 
+ if (messageText && argsKeys.length > 0) {
+ for (const [key, val] of Object.entries(vars)) {
+ const pattern = new RegExp(`{{${key}}}`, 'g');
+ messageText = messageText.replace(pattern, val?.toString() || '');
+ }
+ }
+ 
+ return messageText || key;
+ };*/
 
 // TODO: unComment before using function
 /*export const convertColor = (color, percent) => {
