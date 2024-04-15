@@ -1,5 +1,5 @@
 import PageDetails from '@/app/dashboard/components/page-details';
-import ProductsTable from './components/products-table';
+import TextbookTable from './components/textbook-table';
 
 const ProductsPage = () => {
   return (
@@ -9,7 +9,7 @@ const ProductsPage = () => {
       </PageDetails>
       
       <div className="px-[3%]">
-        <ProductsTable />
+        <TextbookTable />
       </div>
     </>
   );

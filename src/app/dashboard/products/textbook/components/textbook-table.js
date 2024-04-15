@@ -7,7 +7,7 @@ import {Button, Col, Form, Input, Modal, Row, Select, Switch, Table} from 'antd'
 import {SearchOutlined} from '@/templates/icons';
 import debounce from 'lodash.debounce';
 import dynamic from 'next/dynamic';
-import SaveProductForm from './save-product-form';
+import SaveTextbookForm from './save-textbook-form';
 import {formatNumber} from '@/utils/helpers';
 import baseURL from '@/utils/axios/baseURL';
 import {EditOutlined, FilePdfOutlined} from '@ant-design/icons';
@@ -15,7 +15,7 @@ import Image from 'next/image';
 
 const DatePicker = dynamic(() => import('@/templates/UI/date-picker').then((mod) => mod.DatePicker), {ssr: false});
 
-const ProductsTable = () => {
+const TextbookTable = () => {
   const [formRef] = Form.useForm();
   const request = useRequest();
   
@@ -29,9 +29,9 @@ const ProductsTable = () => {
   const debouncedOnSearch = useMemo(search => debounce(handleOnChangeSearchFilter, 500), []);
   
   const {isLoading, data: productsData} = request.useQuery({
-    url: '/v1/product',
+    url: '/v1/textbook',
     params: filters,
-    queryKey: ['products-list', filters]
+    queryKey: ['textbook-list', filters]
   });
   
   const products = productsData?.response?.products || [];
@@ -156,7 +156,7 @@ const ProductsTable = () => {
         className="!w-full md:!w-[65%] !top-[20px]"
         destroyOnClose
       >
-        <SaveProductForm
+        <SaveTextbookForm
           handleCloseModal={handleOnCloseNewProductModal}
           editProductId={editProductId}
           editProductData={editProductData}
@@ -166,4 +166,4 @@ const ProductsTable = () => {
   );
 };
 
-export default ProductsTable;
+export default TextbookTable;

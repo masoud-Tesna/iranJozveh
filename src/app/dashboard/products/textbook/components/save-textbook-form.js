@@ -1,15 +1,13 @@
-import {Button, Col, Form, Input, Row, Select, Space, Spin} from 'antd';
+import {Button, Col, Form, Input, Row, Space, Spin} from 'antd';
 import {handleCreateAntdZodValidator, setInputRule} from '@/utils/helpers';
 import {NewProductZod} from '@/app/dashboard/products/textbook/schema/new-product';
 import {Upload} from '@/templates/UI';
 import baseURL from '@/utils/axios/baseURL';
-import {useAuth} from '@/app/context/auth/auth-context';
 import {useRequest} from '@/utils/useRequest';
 import {useQueryClient} from '@tanstack/react-query';
 import {useEffect} from 'react';
 
-const SaveProductForm = ({handleCloseModal, editProductId, editProductData}) => {
-  const {tokenInfo} = useAuth();
+const SaveTextbookForm = ({handleCloseModal, editProductId, editProductData}) => {
   const [formRef] = Form.useForm();
   const queryClient = useQueryClient();
   const request = useRequest();
@@ -99,11 +97,11 @@ const SaveProductForm = ({handleCloseModal, editProductId, editProductData}) => 
   
   const {isPending: createProductIsLoading, mutateAsync: createProductRequest} = request.useMutation({
     url: '/v1/textbookk',
-    mutationKey: ['createProduct']
+    mutationKey: ['createTextbook']
   });
   
   const {isPending: updateProductIsLoading, mutateAsync: updateProductRequest} = request.useMutation({
-    url: `/v1/product/textbook/${editProductId}`,
+    url: `/v1/textbook/${editProductId}`,
     method: 'patch',
     mutationKey: ['updateProduct']
   });
@@ -198,7 +196,7 @@ const SaveProductForm = ({handleCloseModal, editProductId, editProductData}) => 
                 name="pdf"
                 asPdfFile
                 listType="picture-card"
-                action={'/v1/product/textbook/upload/pdf'}
+                action={'/v1/textbook/upload/pdf'}
                 handleReturnResponse={uploadResponse => {
                   formRef.setFields([
                     {
@@ -280,4 +278,4 @@ const SaveProductForm = ({handleCloseModal, editProductId, editProductData}) => 
   );
 };
 
-export default SaveProductForm;
+export default SaveTextbookForm;
