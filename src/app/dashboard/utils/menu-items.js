@@ -17,6 +17,11 @@ export const menuItems = [
         key: 'textbook',
         label: 'درسنامه',
         link: '/dashboard/products/textbook'
+      },
+      {
+        key: 'course',
+        label: 'دوره آموزشی',
+        link: '/dashboard/products/course'
       }
     ]
   },
