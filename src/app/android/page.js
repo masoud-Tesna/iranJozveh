@@ -5,6 +5,10 @@ import AndroidNewVersionAnimation from '@/app/android/components/android-new-ver
 import NewVersionDetails from '@/app/android/components/new-version-details';
 import DownloadNewVersion from '@/app/android/components/download-new-version';
 
+export const metadata = {
+  title: 'دریافت آخرین نسخه اندروید'
+};
+
 const AndroidPage = async () => {
   return (
     <Row justify={'center'} className="min-h-full flex-1 flex flex-col">
