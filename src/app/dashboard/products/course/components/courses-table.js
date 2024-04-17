@@ -1,15 +1,16 @@
 'use client';
 
-import {Button, Modal, Table} from 'antd';
+import {Badge, Button, Modal, Table} from 'antd';
 import Image from 'next/image';
 import baseURL from '@/utils/axios/baseURL';
-import {EditOutlined, EyeFilled, FilePdfOutlined} from '@ant-design/icons';
+import {EditOutlined, EyeFilled, FilePdfOutlined, VideoCameraFilled} from '@ant-design/icons';
 import {formatNumber} from '@/utils/helpers';
 import {useRequest} from '@/utils/useRequest';
 import {useState} from 'react';
 import SaveCourseForm from '@/app/dashboard/products/course/components/save-course-form';
+import Link from 'next/link';
 
-const CourseTable = () => {
+const CoursesTable = () => {
   const request = useRequest();
   
   const [filters, setFilters] = useState({pageNumber: 1});
@@ -77,10 +78,13 @@ const CourseTable = () => {
       align: 'center',
       dataIndex: '_id',
       key: 'meetings',
-      render: (productId, row) => <EyeFilled
-        className="!text-primary !text-[18px] cursor-pointer"
-        // onClick={() => handleEditCourse(productId, row)}
-      />
+      render: (productId, row) => <Badge count={row?.sessionCount} size={'default'} color={'green'}>
+        <Link href={`/dashboard/products/course/${productId}`}>
+          <VideoCameraFilled
+            className="!text-primary !text-[22px]"
+          />
+        </Link>
+      </Badge>
     }
   ];
   
@@ -114,7 +118,7 @@ const CourseTable = () => {
         open={newCourseModalOpen}
         onCancel={handleOnCloseNewCourseModal}
         maskClosable={false}
-        title={editCourseId ? 'ویرایش دورهدوره' : 'افزودن دوره جدید'}
+        title={editCourseId ? 'ویرایش دوره' : 'افزودن دوره جدید'}
         footer={null}
         className="!w-full md:!w-[65%] !top-[20px]"
         destroyOnClose
@@ -129,4 +133,4 @@ const CourseTable = () => {
   );
 };
 
-export default CourseTable;
+export default CoursesTable;

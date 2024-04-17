@@ -9,7 +9,7 @@ import gregorian_en from 'react-date-object/locales/gregorian_en';
 import persian from 'react-date-object/calendars/persian';
 import {Button, Col, Form, Input, Modal, Row, Select, Switch, Table, Typography} from 'antd';
 import {SearchOutlined} from '@/templates/icons';
-import debounce from 'lodash.debounce';
+import {debounce} from 'lodash';
 import dynamic from 'next/dynamic';
 import SaveUserForm from './save-user-form';
 import {truncatedMiddleText} from '@/utils/helpers';

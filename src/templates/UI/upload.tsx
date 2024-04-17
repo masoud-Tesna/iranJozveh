@@ -1,11 +1,11 @@
 'use client';
 
-import { Upload as AntdUpload } from 'antd';
+import { Form, Upload as AntdUpload } from 'antd';
 import Image from 'next/image';
 import { Children, FC, useState } from 'react';
 import { UploadChangeParam, UploadFile, UploadProps } from 'antd/es/upload';
 import { getBase64 } from '@/utils/helpers';
-import { LoadingOutlined, FilePdfOutlined } from '@ant-design/icons';
+import { LoadingOutlined, FilePdfOutlined, VideoCameraFilled } from '@ant-design/icons';
 import classNames from 'classnames';
 import { TUploadProps } from '@/templates/UI/types';
 import { AndroidOutlined, TrashFilled } from '@/templates/icons';
@@ -16,14 +16,15 @@ export const Upload: FC<TUploadProps> = ({
   className,
   imageProps,
   handleReturnResponse,
-  deleteLogo = false,
-  asPdfFile = false,
-  asApkFile = false,
+  deleteFile = false,
+  fileType = 'image',
   beforeUploadFile,
   editFile,
   children,
   ...rest
 }) => {
+  const formRef = Form.useFormInstance();
+  
   const request = useRequest();
   
   const [imageUrl, setImageUrl] = useState<string>(editFile ? editFile : '');
@@ -36,22 +37,28 @@ export const Upload: FC<TUploadProps> = ({
     mutationKey: ['uploadFile', rest?.action]
   });
   
-  const handleChange: UploadProps['onChange'] = async (info: UploadChangeParam<UploadFile>) => {
+  const handleChange: UploadProps['onChange'] = async (info: UploadChangeParam) => {
     try {
-      await beforeUploadFile(info.file);
-      
-      const formData = new FormData;
-      
-      //@ts-ignore
-      formData.append(rest?.name, info.file);
-      
-      const res = await uploadFileRequest(formData);
-      
-      getBase64(info?.file, (url: any) => {
-        setImageUrl(url);
-      });
-      
-      handleReturnResponse(res?.response);
+      if (fileType === 'video') {
+        //@ts-ignore
+        formRef.setFieldsValue({ [rest?.name]: info?.file });
+        
+        setImageUrl('uploaded');
+      }
+      else {
+        await beforeUploadFile(info.file);
+        
+        const formData = new FormData;
+        
+        //@ts-ignore
+        formData.append(rest?.name as any, info.file);
+        
+        const res = await uploadFileRequest(formData);
+        
+        getBase64(info?.file, (url: any) => setImageUrl(url));
+        
+        handleReturnResponse(res?.response);
+      }
     }
     
     catch (error) {
@@ -59,9 +66,9 @@ export const Upload: FC<TUploadProps> = ({
     }
   };
   
-  const handleDeleteLogo = async () => {
-    if (rest?.handleDeleteLogo) {
-      await rest?.handleDeleteLogo();
+  const handleOnDeleteUploadedFile = async () => {
+    if (rest?.handleDeleteFile) {
+      await rest?.handleDeleteFile();
       setImageUrl('');
     }
   };
@@ -78,6 +85,17 @@ export const Upload: FC<TUploadProps> = ({
     </div>
   );
   
+  const iconForAfterUpload = {
+    image: <Image
+      src={ imageUrl }
+      { ...imageProps }
+      alt={ imageProps?.alt || '' }
+    />,
+    pdf: <FilePdfOutlined className="!text-[70px] !text-primary" />,
+    apk: <AndroidOutlined className="!text-[70px] !text-primary" />,
+    video: <VideoCameraFilled className="!text-[70px] !text-primary" />
+  };
+  
   return (
     <AntdUpload
       onChange={ handleChange }
@@ -85,44 +103,32 @@ export const Upload: FC<TUploadProps> = ({
         className,
         '--avatar-uploader',
         { '[&>div>span]:p-[11px]': !imageUrl },
-        { '--removeLogo': deleteLogo && imageUrl }
-        // { '[&>div>span]:pointer-events-none': deleteLogo && imageUrl }
+        { '--removeLogo': deleteFile && imageUrl }
+        // { '[&>div>span]:pointer-events-none': deleteFile && imageUrl }
       ) }
-      disabled={ !!(deleteLogo && imageUrl) }
+      disabled={ !!(deleteFile && imageUrl) }
       { ...rest }
     >
       { Children.count(children) ?
         <>
           { children }
           
-          { deleteLogo &&
+          { deleteFile &&
             <TrashFilled
               className="--trashIcon !text-white !text-[24px] z-10 pointer-events-auto"
-              onClick={ handleDeleteLogo }
+              onClick={ handleOnDeleteUploadedFile }
             /> }
         </> :
         (
           <>
             { imageUrl ?
-              (
-                asPdfFile ?
-                  <FilePdfOutlined className="!text-[70px] !text-primary" />
-                  :
-                  asApkFile ?
-                    <AndroidOutlined className="!text-[70px] !text-primary" />
-                    :
-                    <Image
-                      src={ imageUrl }
-                      { ...imageProps }
-                      alt={ imageProps?.alt || '' }
-                    />
-              ) :
+              iconForAfterUpload[fileType] :
               uploadButton }
             
-            { deleteLogo &&
+            { deleteFile &&
               <TrashFilled
                 className="--trashIcon !text-white !text-[24px] z-10 pointer-events-disabled"
-                onClick={ handleDeleteLogo }
+                onClick={ handleOnDeleteUploadedFile }
               /> }
           </>
         )

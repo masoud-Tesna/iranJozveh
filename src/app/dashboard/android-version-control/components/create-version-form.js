@@ -1,15 +1,12 @@
-import {Button, Col, Form, Input, Row, Select, Space, Spin, Switch} from 'antd';
-import {handleCreateAntdZodValidator, setInputRule} from '@/utils/helpers';
-import {NewProductZod} from '@/app/dashboard/products/textbook/schema/new-product';
+import {Button, Col, Form, Input, Row, Space, Spin, Switch} from 'antd';
+import {handleCreateAntdZodValidator} from '@/utils/helpers';
 import {useRequest} from '@/utils/useRequest';
 import {NewVersionZod} from '@/app/dashboard/android-version-control/schema/new-version';
 import {AddCircleFilled, MinusCircleFilled} from '@/templates/icons';
 import {Fragment} from 'react';
-import {DeleteOutlined, UploadOutlined} from '@ant-design/icons';
-import classNames from 'classnames';
 import {Upload} from '@/templates/UI';
-import baseURL from '@/utils/axios/baseURL';
 import {useQueryClient} from '@tanstack/react-query';
+import {setInputRule} from '@/utils/setInputRule';
 
 const CreateVersionForm = ({handleCloseModal}) => {
   const [formRef] = Form.useForm();
@@ -150,7 +147,7 @@ const CreateVersionForm = ({handleCloseModal}) => {
                   >
                     <Upload
                       name="apk"
-                      asApkFile
+                      fileType={'apk'}
                       listType="picture-card"
                       action={`/v1/android/upload/apk/?versionCode=${versionName}`}
                       showUploadList={false}

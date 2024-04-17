@@ -1,11 +1,12 @@
 import {Button, Col, Form, Input, Row, Space, Spin} from 'antd';
 import {useQueryClient} from '@tanstack/react-query';
 import {useRequest} from '@/utils/useRequest';
-import {handleCreateAntdZodValidator, setInputRule} from '@/utils/helpers';
+import {handleCreateAntdZodValidator} from '@/utils/helpers';
 import {useEffect} from 'react';
 import {Upload} from '@/templates/UI';
 import baseURL from '@/utils/axios/baseURL';
 import {NewCourseZod} from '@/app/dashboard/products/course/schema/new-course';
+import {setInputRule} from '@/utils/setInputRule';
 
 const SaveCourseForm = ({handleCloseModal, editCourseId, editCourseData}) => {
   
@@ -175,8 +176,8 @@ const SaveCourseForm = ({handleCloseModal, editCourseId, editCourseData}) => {
                   className: 'max-w-full max-h-full'
                 }}
                 uploadButtonTitle={<div className="text-primary-shade-8 text-buttonSm">بارگذاری تصویر</div>}
-                deleteLogo
-                handleDeleteLogo={handleDeleteImage}
+                deleteFile
+                handleDeleteFile={handleDeleteImage}
               />
             </Form.Item>
           </Col>

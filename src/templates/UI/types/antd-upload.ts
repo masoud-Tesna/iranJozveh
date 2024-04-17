@@ -7,10 +7,9 @@ export type TUploadProps = UploadProps & {
   uploadButtonTitle: string | ReactNode
   imageProps?: Omit<ImageProps, 'src'>,
   handleReturnResponse: (response: any) => void,
-  handleDeleteLogo?: () => Promise<void>,
-  deleteLogo?: boolean,
-  asPdfFile?: boolean,
-  asApkFile?: boolean,
+  deleteFile?: boolean,
+  handleDeleteFile?: () => Promise<void>,
+  fileType?: 'image' | 'pdf' | 'apk' | 'video',
   editFile?: string,
   beforeUploadFile: (file: any) => Promise<void>;
 }

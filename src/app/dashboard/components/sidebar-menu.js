@@ -10,12 +10,13 @@ const SidebarMenu = () => {
   
   segment.unshift('/dashboard');
   
-  // segment[0] = '/dashboard';
+  
+  let filteredSegment = segment.filter(item => {
+    return isNaN(item) && item.length !== 24;
+  });
   
   
-  const findCurrentMenuItem = findMenuItemsByLink(menuItems, segment?.join('/'));
-  
-  console.log(findCurrentMenuItem);
+  const findCurrentMenuItem = findMenuItemsByLink(menuItems, filteredSegment?.join('/'));
   
   const items = menuItems?.map(item => {
     const children = item?.children;

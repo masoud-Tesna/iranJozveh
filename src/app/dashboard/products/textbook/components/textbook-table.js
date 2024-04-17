@@ -5,7 +5,7 @@ import {useQueryClient} from '@tanstack/react-query';
 import {useEffect, useMemo, useState} from 'react';
 import {Button, Col, Form, Input, Modal, Row, Select, Switch, Table} from 'antd';
 import {SearchOutlined} from '@/templates/icons';
-import debounce from 'lodash.debounce';
+import {debounce} from 'lodash';
 import dynamic from 'next/dynamic';
 import SaveTextbookForm from './save-textbook-form';
 import {formatNumber} from '@/utils/helpers';

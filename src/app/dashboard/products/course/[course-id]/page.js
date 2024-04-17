@@ -1,7 +1,7 @@
 import PageDetails from '@/app/dashboard/components/page-details';
-import CoursesTable from './components/courses-table';
+import SessionsTable from './components/sessions-table';
 
-const CoursePage = () => {
+const SessionsPage = () => {
   return (
     <>
       <PageDetails>
@@ -9,10 +9,10 @@ const CoursePage = () => {
       </PageDetails>
       
       <div className="px-[3%]">
-        <CoursesTable />
+        <SessionsTable />
       </div>
     </>
   );
 };
 
-export default CoursePage;
+export default SessionsPage;

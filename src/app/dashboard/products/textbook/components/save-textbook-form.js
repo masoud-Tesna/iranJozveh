@@ -1,11 +1,12 @@
 import {Button, Col, Form, Input, Row, Space, Spin} from 'antd';
-import {handleCreateAntdZodValidator, setInputRule} from '@/utils/helpers';
+import {handleCreateAntdZodValidator} from '@/utils/helpers';
 import {NewProductZod} from '@/app/dashboard/products/textbook/schema/new-product';
 import {Upload} from '@/templates/UI';
 import baseURL from '@/utils/axios/baseURL';
 import {useRequest} from '@/utils/useRequest';
 import {useQueryClient} from '@tanstack/react-query';
 import {useEffect} from 'react';
+import {setInputRule} from '@/utils/setInputRule';
 
 const SaveTextbookForm = ({handleCloseModal, editProductId, editProductData}) => {
   const [formRef] = Form.useForm();
@@ -127,8 +128,6 @@ const SaveTextbookForm = ({handleCloseModal, editProductId, editProductData}) =>
     }
   };
   
-  console.log('editProductData >>>', editProductData);
-  
   useEffect(() => {
     if (editProductId?.length) {
       formRef.setFieldsValue({
@@ -194,7 +193,7 @@ const SaveTextbookForm = ({handleCloseModal, editProductId, editProductData}) =>
             >
               <Upload
                 name="pdf"
-                asPdfFile
+                fileType={'pdf'}
                 listType="picture-card"
                 action={'/v1/textbook/upload/pdf'}
                 handleReturnResponse={uploadResponse => {
@@ -218,8 +217,8 @@ const SaveTextbookForm = ({handleCloseModal, editProductId, editProductData}) =>
                   className: 'max-w-full max-h-full'
                 }}
                 uploadButtonTitle={<div className="text-primary-shade-8 text-buttonSm">بارگذاری فایل</div>}
-                deleteLogo
-                handleDeleteLogo={handleDeletePdf}
+                deleteFile
+                handleDeleteFile={handleDeletePdf}
               />
             </Form.Item>
           </Col>
@@ -255,8 +254,8 @@ const SaveTextbookForm = ({handleCloseModal, editProductId, editProductData}) =>
                   className: 'max-w-full max-h-full'
                 }}
                 uploadButtonTitle={<div className="text-primary-shade-8 text-buttonSm">بارگذاری تصویر</div>}
-                deleteLogo
-                handleDeleteLogo={handleDeleteImage}
+                deleteFile
+                handleDeleteFile={handleDeleteImage}
               />
             </Form.Item>
           </Col>

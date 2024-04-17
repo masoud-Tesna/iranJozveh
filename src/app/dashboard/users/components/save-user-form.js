@@ -1,7 +1,7 @@
 import {Button, Col, Empty, Form, Input, Row, Select, Space, Spin} from 'antd';
 import {useRequest} from '@/utils/useRequest';
 import {useEffect, useMemo, useState} from 'react';
-import debounce from 'lodash.debounce';
+import {debounce} from 'lodash';
 import {handleCreateAntdZodValidator} from '@/utils/helpers';
 import {NewUserZod} from '@/app/dashboard/users/schema/new-user';
 import {DeleteOutlined} from '@ant-design/icons';

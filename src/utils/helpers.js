@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {DateObject} from 'react-multi-date-picker';
 import persian from 'react-date-object/calendars/persian';
 import gregorian from 'react-date-object/calendars/gregorian';
-import messages from './inputRulesMessage';
+import {cloneDeepWith, isPlainObject, toString} from 'lodash';
 
 // TODO: unComment before using function
 export const formatNumber = number => {
@@ -192,3 +192,5 @@ export const truncatedMiddleText = ({text, startLength = 5, endLength = 15}) => 
   
   return startWords + ' ' + middleDots + ' ' + endWords;
 };
+
+export const toStringObject = (obj) => cloneDeepWith(obj, value => !isPlainObject(value) ? toString(value) : undefined);

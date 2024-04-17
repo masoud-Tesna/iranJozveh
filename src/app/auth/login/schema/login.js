@@ -1,7 +1,6 @@
 import {z} from 'zod';
-import {NationalCodeZod} from '@/app/schema/national-code';
 import {PasswordZod} from '@/app/schema/password';
-import {isValidNationalCode, setInputRule} from '@/utils/helpers';
+import {setInputRule} from '@/utils/setInputRule';
 
 export const LoginZod = z.object({
   nationalCode: z.string({required_error: setInputRule('requiredInput', {inputName: 'کد ملی'})}),
