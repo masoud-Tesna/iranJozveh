@@ -12,10 +12,10 @@ const SaveTextbookForm = ({handleCloseModal, editProductId, editProductData}) =>
   const [formRef] = Form.useForm();
   const queryClient = useQueryClient();
   const request = useRequest();
-  
+
   const beforeUploadImage = async (file) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    
+
     if (!isJpgOrPng) {
       formRef.setFields([
         {
@@ -38,9 +38,9 @@ const SaveTextbookForm = ({handleCloseModal, editProductId, editProductData}) =>
         }
       ]);
     }
-    
+
     const isLt2M = file.size / 1024 / 1024 < 0.5;
-    
+
     if (!isLt2M) {
       formRef.setFields([
         {
@@ -63,15 +63,15 @@ const SaveTextbookForm = ({handleCloseModal, editProductId, editProductData}) =>
         }
       ]);
     }
-    
+
     return Promise.resolve();
   };
-  
+
   const handleDeleteImage = async () => formRef.setFieldsValue({image: undefined});
-  
+
   const beforeUploadPdf = async (file) => {
     const isPdf = file.type === 'application/pdf';
-    
+
     if (!isPdf) {
       formRef.setFields([
         {
@@ -79,7 +79,7 @@ const SaveTextbookForm = ({handleCloseModal, editProductId, editProductData}) =>
           errors: [setInputRule('imageUploadTypeError', {inputName: 'فایل PDF', types: 'PDF'})]
         }
       ]);
-      
+
       return Promise.reject('pdf unsupported filetype');
     }
     else {
@@ -90,44 +90,44 @@ const SaveTextbookForm = ({handleCloseModal, editProductId, editProductData}) =>
         }
       ]);
     }
-    
+
     return Promise.resolve();
   };
-  
+
   const handleDeletePdf = async () => formRef.setFieldsValue({file: undefined});
-  
+
   const {isPending: createProductIsLoading, mutateAsync: createProductRequest} = request.useMutation({
     url: '/v1/textbookk',
     mutationKey: ['createTextbook']
   });
-  
+
   const {isPending: updateProductIsLoading, mutateAsync: updateProductRequest} = request.useMutation({
     url: `/v1/textbook/${editProductId}`,
     method: 'patch',
     mutationKey: ['updateProduct']
   });
-  
+
   const handleOnFinishForm = async () => {
     try {
       await formRef.validateFields();
-      
+
       const values = formRef.getFieldsValue(true);
-      
+
       if (editProductId) {
         await updateProductRequest(values);
       }
       else {
         await createProductRequest(values);
       }
-      
+
       await queryClient.refetchQueries({queryKey: ['products-list']});
-      
+
       await handleCloseModal();
     } catch (error) {
       console.log('error in handleOnFinishForm >>', error);
     }
   };
-  
+
   useEffect(() => {
     if (editProductId?.length) {
       formRef.setFieldsValue({
@@ -137,7 +137,7 @@ const SaveTextbookForm = ({handleCloseModal, editProductId, editProductData}) =>
       });
     }
   }, [editProductId]);
-  
+
   return (
     <Spin spinning={createProductIsLoading || updateProductIsLoading}>
       <Form
@@ -148,7 +148,7 @@ const SaveTextbookForm = ({handleCloseModal, editProductId, editProductData}) =>
         }}
       >
         <Form.Item name={'category'} initialValue="textbook" hidden />
-        
+
         <Row gutter={8}>
           <Col span={12}>
             <Form.Item
@@ -158,7 +158,7 @@ const SaveTextbookForm = ({handleCloseModal, editProductId, editProductData}) =>
               <Input placeholder="نام درسنامه" maxLength={30} />
             </Form.Item>
           </Col>
-          
+
           <Col span={12}>
             <Form.Item
               name={'pageCount'}
@@ -167,7 +167,7 @@ const SaveTextbookForm = ({handleCloseModal, editProductId, editProductData}) =>
               <Input placeholder="تعداد صفحات" />
             </Form.Item>
           </Col>
-          
+
           <Col span={12}>
             <Form.Item
               name={'price'}
@@ -176,16 +176,54 @@ const SaveTextbookForm = ({handleCloseModal, editProductId, editProductData}) =>
               <Input placeholder="قیمت" />
             </Form.Item>
           </Col>
-          
-          <Col span={24}>
+
+          <Col span={18}>
             <Form.Item
               name={'description'}
             >
-              <Input.TextArea placeholder={'توضیحات'} rows={4} />
+              <Input.TextArea placeholder={'توضیحات'} rows={5} />
             </Form.Item>
           </Col>
-          
-          <Col span={18}>
+
+          <Col span={6}>
+            <Form.Item
+                name="image"
+                className="--avatar-uploader-formItem"
+                rules={[handleCreateAntdZodValidator(NewProductZod)]}
+            >
+              <Upload
+                  uploadIconFull
+                  name="image"
+                  listType="picture-card"
+                  action={'/v1/product/upload/image'}
+                  handleReturnResponse={uploadResponse => {
+                    formRef.setFields([
+                      {
+                        name: 'image',
+                        value: uploadResponse?.imageName
+                      }
+                    ]);
+                  }}
+                  editFile={editProductData?.image ? baseURL?._baseURL + '/public/products/image/' + editProductData?.image : null}
+                  showUploadList={false}
+                  accept={'.png, .jpg, .jpeg'}
+                  beforeUpload={() => false}
+                  beforeUploadFile={beforeUploadImage}
+                  imageProps={{
+                    alt: 'avatar',
+                    layout: 'responsive',
+                    width: 140,
+                    height: 140,
+                    className: 'max-w-full max-h-full'
+                  }}
+                  uploadButtonTitle={<div className="text-primary-shade-8 text-buttonSm">بارگذاری تصویر</div>}
+                  deleteFile
+                  handleDeleteFile={handleDeleteImage}
+              />
+            </Form.Item>
+          </Col>
+
+          <Col span={24}>
             <Form.Item
               name="file"
               className="--avatar-uploader-formItem"
@@ -222,50 +260,13 @@ const SaveTextbookForm = ({handleCloseModal, editProductId, editProductData}) =>
               />
             </Form.Item>
           </Col>
-          
-          <Col span={6}>
-            <Form.Item
-              name="image"
-              className="--avatar-uploader-formItem"
-              rules={[handleCreateAntdZodValidator(NewProductZod)]}
-            >
-              <Upload
-                name="image"
-                listType="picture-card"
-                action={'/v1/product/upload/image'}
-                handleReturnResponse={uploadResponse => {
-                  formRef.setFields([
-                    {
-                      name: 'image',
-                      value: uploadResponse?.imageName
-                    }
-                  ]);
-                }}
-                editFile={editProductData?.image ? baseURL?._baseURL + '/public/products/image/' + editProductData?.image : null}
-                showUploadList={false}
-                accept={'.png, .jpg, .jpeg'}
-                beforeUpload={() => false}
-                beforeUploadFile={beforeUploadImage}
-                imageProps={{
-                  alt: 'avatar',
-                  layout: 'responsive',
-                  width: 140,
-                  height: 140,
-                  className: 'max-w-full max-h-full'
-                }}
-                uploadButtonTitle={<div className="text-primary-shade-8 text-buttonSm">بارگذاری تصویر</div>}
-                deleteFile
-                handleDeleteFile={handleDeleteImage}
-              />
-            </Form.Item>
-          </Col>
-          
+
           <Col span={24} className="pt-64 text-center">
             <Space>
               <Button className="w-[176px]" onClick={handleCloseModal}>
                 لغو
               </Button>
-              
+
               <Button type="primary" className="w-[176px]" onClick={handleOnFinishForm}>
                 {editProductId ? 'ویرایش درسنامه' : 'ایجاد درسنامه'}
               </Button>

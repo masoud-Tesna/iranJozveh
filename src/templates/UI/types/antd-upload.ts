@@ -1,7 +1,6 @@
-import { UploadProps } from 'antd/es/upload';
-import { ReactNode } from 'react';
-import { ImageProps } from 'next/image';
-import { RcFile } from 'antd/es/upload/interface';
+import {UploadProps} from 'antd/es/upload';
+import {ReactNode} from 'react';
+import {ImageProps} from 'next/image';
 
 export type TUploadProps = UploadProps & {
   uploadButtonTitle: string | ReactNode
@@ -11,5 +10,6 @@ export type TUploadProps = UploadProps & {
   handleDeleteFile?: () => Promise<void>,
   fileType?: 'image' | 'pdf' | 'apk' | 'video',
   editFile?: string,
-  beforeUploadFile: (file: any) => Promise<void>;
+  beforeUploadFile: (file: any) => Promise<void>,
+  uploadIconFull?: boolean
 }

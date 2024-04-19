@@ -38,17 +38,17 @@
   .d-rtl {
     direction: rtl;
   }
-  
+
   .d-ltr {
     direction: ltr;
   }
-  
+
   .center {
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  
+
   .--listDot {
     @apply size-4 bg-gray-70 rounded-full inline-block me-8 align-middle;
   }
@@ -67,19 +67,19 @@
 .ant-table-wrapper {
   .ant-table {
     @apply text-captionMd font-bold !important;
-    
+
     .ant-table-thead {
       @apply shadow-9;
     }
-    
+
     .ant-table-cell {
       @apply text-captionMd border-0 !important;
-      
+
       &:before {
         display: none;
       }
     }
-    
+
     .ant-table-tbody {
       .ant-table-cell.ant-table-cell-row-hover,
       .ant-table-row:nth-child(even) {
@@ -107,17 +107,17 @@
 
 .ant-divider {
   @apply border-gray-100/20 before:hidden !important;
-  
+
   & > .ant-divider-inner-text {
     @apply text-secondary text-captionXl;
   }
-  
+
   &.ant-divider-with-text-left {
     & > span {
       @apply p-0 pe-16 !important;
     }
   }
-  
+
   &.ant-divider-with-text-right {
     & > span {
       @apply p-0 ps-16 !important;
@@ -126,22 +126,28 @@
 }
 
 .--avatar-uploader-formItem {
-  
+
   .--avatar-uploader {
     .ant-upload-select {
-      @apply border-solid w-full h-[140px] bg-neutral-white !important;
+      @apply border-solid w-full h-[90px] bg-neutral-white !important;
     }
-    
+
+    &.--asImageType {
+      .ant-upload-select {
+        @apply h-[140px] !important;
+      }
+    }
+
     &.--removeLogo {
       .ant-upload-select {
         &:hover {
           .--trashIcon {
             @apply block;
           }
-          
+
           span.ant-upload {
             position: relative;
-            
+
             &:before {
               position: absolute;
               z-index: 1;
@@ -155,23 +161,23 @@
           }
         }
       }
-      
+
       .ant-upload-disabled {
         @apply cursor-auto !important;
       }
     }
-    
+
     .--trashIcon {
       @apply absolute hidden;
     }
   }
-  
+
   &.ant-form-item-has-error {
     .ant-upload-select {
       @apply border-[#ff4d4f] !important;
     }
   }
-  
+
   .ant-form-item-explain-error {
     @apply text-captionMd;
   }
@@ -185,5 +191,33 @@
   &,
   & > .ant-spin-container {
     @apply min-h-full flex-1 flex flex-col
+  }
+}
+
+.--tabs {
+  @apply flex-row flex-nowrap !important;
+
+  &.--line {
+    @apply items-center text-[rgba(98,81,221,0.50)] border-dashed border-0 border-b-[0.7px] border-[#6251DD];
+
+    .--tabItem {
+      @apply px-[12.5px] text-captionLg cursor-pointer;
+
+      &.--active {
+        @apply text-primary;
+      }
+    }
+  }
+
+  &.--providerTab {
+    .--tabItem {
+      &:nth-child(2) {
+        .ant-space {
+          .ant-space-item:last-child {
+            @apply ms-[-10px];
+          }
+        }
+      }
+    }
   }
 }

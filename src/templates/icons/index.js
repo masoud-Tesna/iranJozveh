@@ -10,3 +10,4 @@ export {AndroidOutlined} from './android-outlined';
 export {DownloadOutlined} from './download-outlined';
 export {AddCircleFilled} from './add-circle-filled';
 export {MinusCircleFilled} from './minus-circle-filled';
+export {UploadFilled} from './upload-filled';

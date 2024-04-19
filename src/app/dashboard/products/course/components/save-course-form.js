@@ -9,14 +9,14 @@ import {NewCourseZod} from '@/app/dashboard/products/course/schema/new-course';
 import {setInputRule} from '@/utils/setInputRule';
 
 const SaveCourseForm = ({handleCloseModal, editCourseId, editCourseData}) => {
-  
+
   const [formRef] = Form.useForm();
   const queryClient = useQueryClient();
   const request = useRequest();
-  
+
   const beforeUploadImage = async (file) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    
+
     if (!isJpgOrPng) {
       formRef.setFields([
         {
@@ -39,9 +39,9 @@ const SaveCourseForm = ({handleCloseModal, editCourseId, editCourseData}) => {
         }
       ]);
     }
-    
+
     const isLt2M = file.size / 1024 / 1024 < 0.5;
-    
+
     if (!isLt2M) {
       formRef.setFields([
         {
@@ -64,44 +64,44 @@ const SaveCourseForm = ({handleCloseModal, editCourseId, editCourseData}) => {
         }
       ]);
     }
-    
+
     return Promise.resolve();
   };
-  
+
   const handleDeleteImage = async () => formRef.setFieldsValue({image: undefined});
-  
+
   const {isPending: createCourseIsLoading, mutateAsync: createCourseRequest} = request.useMutation({
     url: '/v1/course',
     mutationKey: ['createCourse']
   });
-  
+
   const {isPending: updateCourseIsLoading, mutateAsync: updateCourseRequest} = request.useMutation({
     url: `/v1/course/${editCourseId}`,
     method: 'patch',
     mutationKey: ['updateCourse']
   });
-  
+
   const handleOnFinishForm = async () => {
     try {
       await formRef.validateFields();
-      
+
       const values = formRef.getFieldsValue(true);
-      
+
       if (editCourseId) {
         await updateCourseRequest(values);
       }
       else {
         await createCourseRequest(values);
       }
-      
+
       await queryClient.refetchQueries({queryKey: ['course-list']});
-      
+
       await handleCloseModal();
     } catch (error) {
       console.log('error in handleOnFinishForm >>', error);
     }
   };
-  
+
   useEffect(() => {
     if (editCourseId?.length) {
       formRef.setFieldsValue({
@@ -110,7 +110,7 @@ const SaveCourseForm = ({handleCloseModal, editCourseId, editCourseData}) => {
       });
     }
   }, [editCourseId]);
-  
+
   return (
     <Spin spinning={createCourseIsLoading || updateCourseIsLoading}>
       <Form
@@ -126,7 +126,7 @@ const SaveCourseForm = ({handleCloseModal, editCourseId, editCourseData}) => {
               <Input placeholder="نام دوره" maxLength={30} />
             </Form.Item>
           </Col>
-          
+
           <Col span={24}>
             <Form.Item
               name={'price'}
@@ -135,7 +135,7 @@ const SaveCourseForm = ({handleCloseModal, editCourseId, editCourseData}) => {
               <Input placeholder="قیمت" />
             </Form.Item>
           </Col>
-          
+
           <Col span={18}>
             <Form.Item
               name={'description'}
@@ -144,7 +144,7 @@ const SaveCourseForm = ({handleCloseModal, editCourseId, editCourseData}) => {
               <Input.TextArea placeholder={'توضیحات'} rows={4} />
             </Form.Item>
           </Col>
-          
+
           <Col span={6}>
             <Form.Item
               name="image"
@@ -152,6 +152,7 @@ const SaveCourseForm = ({handleCloseModal, editCourseId, editCourseData}) => {
               rules={[handleCreateAntdZodValidator(NewCourseZod)]}
             >
               <Upload
+                  uploadIconFull
                 name="image"
                 listType="picture-card"
                 action={'/v1/product/upload/image'}
@@ -181,13 +182,13 @@ const SaveCourseForm = ({handleCloseModal, editCourseId, editCourseData}) => {
               />
             </Form.Item>
           </Col>
-          
+
           <Col span={24} className="pt-64 text-center">
             <Space>
               <Button className="w-[176px]" onClick={handleCloseModal}>
                 لغو
               </Button>
-              
+
               <Button type="primary" className="w-[176px]" onClick={handleOnFinishForm}>
                 {editCourseId ? 'ویرایش دوره' : 'ایجاد دوره'}
               </Button>
