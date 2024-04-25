@@ -88,7 +88,10 @@ const CreateVersionForm = ({handleCloseModal}) => {
                       </Col>
                       
                       <Col span={2}>
-                        <AddCircleFilled onClick={() => add()} className="!text-neutral-gray-8 text-[40px] mt-4" />
+                        <AddCircleFilled
+                          onClick={() => add()}
+                          className="!text-neutral-gray-8 text-[40px] mt-4"
+                        />
                       </Col>
                       
                       {key > 0 &&
@@ -122,7 +125,10 @@ const CreateVersionForm = ({handleCloseModal}) => {
                     formRef.setFields([
                       {
                         name: 'apk',
-                        errors: [setInputRule('imageUploadTypeError', {inputName: 'فایل نصبی', types: 'APK'})]
+                        errors: [setInputRule('imageUploadTypeError', {
+                          inputName: 'فایل نصبی',
+                          types: 'APK'
+                        })]
                       }
                     ]);
                     
@@ -163,7 +169,8 @@ const CreateVersionForm = ({handleCloseModal}) => {
                       }}
                       disabled={!versionName?.length}
                       uploadButtonTitle={
-                        <div className="text-primary-shade-8 text-buttonSm">بارگذاری فایل نصبی اپلیکیشن</div>}
+                        <div className="text-primary-shade-8 text-buttonSm">بارگذاری فایل نصبی
+                          اپلیکیشن</div>}
                     />
                   </Form.Item>
                 );

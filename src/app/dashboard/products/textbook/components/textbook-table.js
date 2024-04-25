@@ -1,9 +1,8 @@
 'use client';
 
 import {useRequest} from '@/utils/useRequest';
-import {useQueryClient} from '@tanstack/react-query';
 import {useEffect, useMemo, useState} from 'react';
-import {Button, Col, Form, Input, Modal, Row, Select, Switch, Table} from 'antd';
+import {Button, Col, Form, Input, Modal, Row, Table} from 'antd';
 import {SearchOutlined} from '@/templates/icons';
 import {debounce} from 'lodash';
 import dynamic from 'next/dynamic';
@@ -51,7 +50,9 @@ const TextbookTable = () => {
       render: (image) => (
         image ?
           <Image src={baseURL?._baseURL + '/public/products/image/' + image} alt="" width={40} height={40} /> :
-          <span className="p-8 bg-neutral-gray-4 border-solid border-[.5px] border-neutral-gray-8 rounded-full">
+          <span
+            className="p-8 bg-neutral-gray-4 border-solid border-[.5px] border-neutral-gray-8 rounded-full"
+          >
             <FilePdfOutlined className="!text-primary !text-[25px]" />
           </span>
       )

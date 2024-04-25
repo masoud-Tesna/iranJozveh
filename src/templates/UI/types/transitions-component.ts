@@ -1,5 +1,5 @@
-import { AnimatePresenceProps, MotionProps } from 'framer-motion';
-import { FC, Key, PropsWithChildren, ReactNode } from 'react';
+import {AnimatePresenceProps, MotionProps} from 'framer-motion';
+import {FC, Key, PropsWithChildren} from 'react';
 
 export interface TMotion
   extends MotionProps {

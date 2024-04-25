@@ -1,4 +1,4 @@
-import {Button, Col, Empty, Form, Input, Row, Select, Space, Spin} from 'antd';
+import {Badge, Button, Col, Empty, Form, Input, Row, Select, Space, Spin} from 'antd';
 import {useRequest} from '@/utils/useRequest';
 import {useEffect, useMemo, useState} from 'react';
 import {debounce} from 'lodash';
@@ -7,7 +7,7 @@ import {NewUserZod} from '@/app/dashboard/users/schema/new-user';
 import {DeleteOutlined} from '@ant-design/icons';
 import {useQueryClient} from '@tanstack/react-query';
 import starkString from 'starkstring';
-import Tabs from "@/templates/components/tabs";
+import Tabs from '@/templates/components/tabs';
 
 const SaveUserForm = ({handleCloseModal, editUserId, editUserData, setUserToken, handleOpenTokenModal}) => {
   const [formRef] = Form.useForm();
@@ -16,10 +16,13 @@ const SaveUserForm = ({handleCloseModal, editUserId, editUserData, setUserToken,
 
   const nationalCodeWatch = Form.useWatch('nationalCode', formRef);
   const mobileNumberWatch = Form.useWatch('mobileNumber', formRef);
+  const selectedTextbooksWatch = Form.useWatch('selectedTextbooks', formRef) || [];
+  const selectedCoursesWatch = Form.useWatch('selectedCourses', formRef) || [];
 
   const [searchTextbooks, setSearchTextbooks] = useState('');
+  const [searchCourse, setSearchCourse] = useState('');
 
-  const [currentTab, setCurrentTab] = useState(0)
+  const [currentTab, setCurrentTab] = useState(0);
 
   const {
     data: textbooksData,
@@ -35,11 +38,29 @@ const SaveUserForm = ({handleCloseModal, editUserId, editUserData, setUserToken,
 
   const textbooks = textbooksData?.response?.products || [];
 
-  const debounceFetcher = useMemo(() => debounce(setSearchTextbooks, 500), []);
+  const {isLoading: coursesIsLoading, data: coursesData} = request.useQuery({
+    url: '/v1/course',
+    params: {
+      pageNumber: 1,
+      search: searchCourse
+    },
+    queryKey: ['course-list', {pageNumber: 1, search: searchCourse}]
+  });
+
+  const courses = coursesData?.response?.courses || [];
+
+  const debounceFetcherTextbook = useMemo(() => debounce(value => (value && value?.length > 2) ? setSearchTextbooks(value) : setSearchTextbooks(''), 500), []);
+
+  const debounceFetcherCourses = useMemo(() => debounce(value => (value && value?.length > 2) ? setSearchCourse(value) : setSearchCourse(''), 500), []);
 
   const handleDeleteTextbook = textbookId => {
     const selectedTextbooks = formRef.getFieldValue('selectedTextbooks');
     formRef.setFieldValue('selectedTextbooks', selectedTextbooks?.filter(item => item?.value !== textbookId));
+  };
+
+  const handleDeleteCourse = courseId => {
+    const selectedCourses = formRef.getFieldValue('selectedCourses');
+    formRef.setFieldValue('selectedCourses', selectedCourses?.filter(item => item?.value !== courseId));
   };
 
   const {isPending: createCustomerIsLoading, mutateAsync: createCustomerRequest} = request.useMutation({
@@ -61,6 +82,8 @@ const SaveUserForm = ({handleCloseModal, editUserId, editUserData, setUserToken,
 
       values.products = values?.selectedTextbooks?.map(item => item?.value);
 
+      values.courses = values?.selectedCourses?.map(item => item?.value);
+
       if (editUserId) {
         await updateCustomerRequest(values);
       }
@@ -80,24 +103,41 @@ const SaveUserForm = ({handleCloseModal, editUserId, editUserData, setUserToken,
     } catch (error) {
       const selectedTextbooksError = error?.errorFields?.find(item => item?.name[0] === 'selectedTextbooks');
 
+      const selectedCoursesError = error?.errorFields?.find(item => item?.name[0] === 'selectedCourses');
+
       if (selectedTextbooksError?.errors) {
-        formRef.setFields([
+        setCurrentTab(0);
+
+        setTimeout(() => formRef.setFields([
           {
-            name: 'search',
+            name: 'searchTextbook',
             errors: selectedTextbooksError?.errors
           }
-        ]);
+        ]), 0)
+      }
+
+      if (selectedCoursesError?.errors && !selectedTextbooksError?.errors) {
+        setCurrentTab(1);
+      }
+
+      if (selectedCoursesError?.errors) {
+        setTimeout(() => formRef.setFields([
+          {
+            name: 'searchCourse',
+            errors: selectedCoursesError?.errors
+          }
+        ]), 0)
       }
     }
   };
 
   useEffect(() => {
     if (editUserId?.length) {
-      console.log(editUserData)
-      const {products, ...rest} = editUserData;
+      const {products, courses, ...rest} = editUserData;
       formRef.setFieldsValue({
         ...rest,
-        selectedTextbooks: products?.map(item => ({label: item?.name, value: item?._id}))
+        selectedTextbooks: products?.map(item => ({label: item?.name, value: item?._id})),
+        selectedCourses: courses?.map(item => ({label: item?.name, value: item?._id})),
       });
     }
   }, [editUserId]);
@@ -131,19 +171,19 @@ const SaveUserForm = ({handleCloseModal, editUserId, editUserData, setUserToken,
     {
       key: 'textbook',
       tabIndex: 0,
-      title: 'درسنامه',
+      title: <Badge count={selectedTextbooksWatch?.length} size={'default'} offset={[0, -7]}>درسنامه</Badge>,
       component: () =>
-      <Row>
-        <Col span={24}>
-          <Form.Item
-              name={'search'}
+        <Row>
+          <Col span={24}>
+            <Form.Item
+              name={'searchTextbook'}
               label="درسنامه های مجاز برای این کاربر"
-          >
-            <Select
+            >
+              <Select
                 onChange={() => {
                   formRef.setFields([
                     {
-                      name: 'search',
+                      name: 'searchTextbook',
                       errors: []
                     }
                   ]);
@@ -153,9 +193,9 @@ const SaveUserForm = ({handleCloseModal, editUserId, editUserData, setUserToken,
                 showSearch
                 filterOption={false}
                 notFoundContent={textbooksIsLoading ?
-                    <Empty description={<Spin size="small" />} /> :
-                    <Empty />}
-                onSearch={debounceFetcher}
+                  <Empty description={<Spin size="small" />} /> :
+                  <Empty />}
+                onSearch={debounceFetcherTextbook}
                 options={textbooks?.map(searchedTextbook => {
                   return {
                     label: searchedTextbook?.name,
@@ -172,34 +212,121 @@ const SaveUserForm = ({handleCloseModal, editUserId, editUserData, setUserToken,
                     }
                   ]);
 
-                  formRef.setFieldValue('search', null);
+                  formRef.setFieldValue('searchTextbook', null);
+                }}
+              />
+            </Form.Item>
+          </Col>
+
+          <Col span={24} className="mt-8">
+            <Form.Item
+              shouldUpdate={(prevValues, curValues) => prevValues?.selectedTextbooks !== curValues?.selectedTextbooks}
+              noStyle
+            >
+              {({getFieldValue}) => {
+                const selectedTextbooks = getFieldValue('selectedTextbooks') || [];
+
+                return (
+                  <Row
+                    className="text-gray-70 !text-captionMd [&>div]:px-16 [&>div]:h-[56px] [&>div]:leading-[56px] --newUserSelectedCourse"
+                  >
+                    {selectedTextbooks?.map(textbook => (
+                      <Col span={24} key={textbook?.value}>
+                        <Row align="middle" justify="space-between">
+                          <Col>
+                            <span className="--listDot"></span>
+                            {textbook?.label}
+                          </Col>
+
+                          <Col>
+                            <DeleteOutlined
+                              className="!text-red-600 cursor-pointer"
+                              onClick={() => handleDeleteTextbook(textbook?.value)}
+                            />
+                          </Col>
+                        </Row>
+                      </Col>
+                    ))}
+                  </Row>
+                );
+              }}
+            </Form.Item>
+          </Col>
+        </Row>
+    },
+    {
+      key: 'course',
+      tabIndex: 1,
+      title: <Badge count={selectedCoursesWatch?.length} size={'default'} offset={[0, -7]}>ویدئو آموزشی</Badge>,
+      component: () => <Row>
+        <Col span={24}>
+          <Form.Item
+              name={'searchCourse'}
+              label="ویدئوهای آموزشی مجاز برای این کاربر"
+          >
+            <Select
+                onChange={() => {
+                  formRef.setFields([
+                    {
+                      name: 'searchCourse',
+                      errors: []
+                    }
+                  ]);
+                }}
+                loading={coursesIsLoading}
+                placeholder={'جستجو ویدئو...'}
+                showSearch
+                filterOption={false}
+                notFoundContent={coursesIsLoading ?
+                    <Empty description={<Spin size="small" />} /> :
+                    <Empty />}
+                onSearch={debounceFetcherCourses}
+                options={courses?.map(searchedCourse => {
+                  return {
+                    label: searchedCourse?.name,
+                    value: searchedCourse?._id
+                  };
+                })}
+                onSelect={(selectedCourseId, option) => {
+                  const oldData = formRef.getFieldValue('selectedCourses') || [];
+
+                  formRef.setFields([
+                    {
+                      name: 'selectedCourses',
+                      value: oldData.find(item => item?.value === selectedCourseId) ? oldData : [...oldData, option]
+                    }
+                  ]);
+
+                  formRef.setFieldValue('searchCourse', null);
                 }}
             />
           </Form.Item>
         </Col>
 
-        <Col span={24} className='mt-8'>
+        <Col span={24} className="mt-8">
           <Form.Item
-              shouldUpdate={(prevValues, curValues) => prevValues?.selectedTextbooks !== curValues?.selectedTextbooks}
+              shouldUpdate={(prevValues, curValues) => prevValues?.selectedCourses !== curValues?.selectedCourses}
               noStyle
           >
             {({getFieldValue}) => {
-              const selectedTextbooks = getFieldValue('selectedTextbooks') || [];
+              const selectedCourses = getFieldValue('selectedCourses') || [];
 
               return (
-                  <Row className="text-gray-70 !text-captionMd [&>div]:px-16 [&>div]:h-[56px] [&>div]:leading-[56px] --newUserSelectedCourse">
-                    {selectedTextbooks?.map(textbook => (
-                        <Col span={24} key={textbook?.value}>
+                  <Row
+                      className="text-gray-70 !text-captionMd [&>div]:px-16 [&>div]:h-[56px] [&>div]:leading-[56px] --newUserSelectedCourse"
+                  >
+                    {selectedCourses?.map(course => (
+                        <Col span={24} key={course?.value}>
                           <Row align="middle" justify="space-between">
                             <Col>
                               <span className="--listDot"></span>
-                              {textbook?.label}
+                              {course?.label}
                             </Col>
 
                             <Col>
                               <DeleteOutlined
                                   className="!text-red-600 cursor-pointer"
-                                  onClick={() => handleDeleteTextbook(textbook?.value)}
+                                  onClick={() => handleDeleteCourse(course?.value)}
                               />
                             </Col>
                           </Row>
@@ -211,21 +338,14 @@ const SaveUserForm = ({handleCloseModal, editUserId, editUserData, setUserToken,
           </Form.Item>
         </Col>
       </Row>
-
-    },
-    {
-      key: 'course',
-      tabIndex: 1,
-      title: 'ویدئو آموزشی',
-      component: () => <div>Course</div>
     },
     {
       key: 'test',
       tabIndex: 2,
       title: 'آزمون',
-      component: () => <div>Test</div>
+      component: () => <div>Coming soon</div>
     }
-  ]
+  ];
 
   return (
     <Spin spinning={createCustomerIsLoading || updateCustomerIsLoading}>
@@ -237,6 +357,12 @@ const SaveUserForm = ({handleCloseModal, editUserId, editUserData, setUserToken,
           name={'selectedTextbooks'}
           rules={[handleCreateAntdZodValidator(NewUserZod)]}
           hidden
+        />
+
+        <Form.Item
+            name={'selectedCourses'}
+            rules={[handleCreateAntdZodValidator(NewUserZod)]}
+            hidden
         />
 
         <Row gutter={8}>
@@ -271,8 +397,8 @@ const SaveUserForm = ({handleCloseModal, editUserId, editUserData, setUserToken,
             <Tabs items={tabsItem} current={currentTab} onChange={setCurrentTab} />
           </Col>
 
-          <Col span={24} className='mt-24'>
-            { tabsItem[ currentTab ]?.component({})}
+          <Col span={24} className="mt-24">
+            {tabsItem[currentTab]?.component({})}
           </Col>
 
           <Col span={24} className="pt-64 text-center">

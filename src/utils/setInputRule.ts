@@ -9,7 +9,7 @@ export const setInputRule = <T extends MessagesKey>(key: T, vars?: { [key in typ
   
   if (messageText && argsKeys.length > 0) {
     for (const [key, val] of Object.entries(vars as object)) {
-      const pattern = new RegExp(`{{${key}}}`, 'g');
+      const pattern = new RegExp(`{{${ key }}}`, 'g');
       messageText = messageText.replace(pattern, val?.toString() || '');
     }
   }

@@ -12,22 +12,22 @@ import baseURL from '@/utils/axios/baseURL';
 const SessionsTable = () => {
   const request = useRequest();
   const params = useParams();
-
+  
   const courseId = params['course-id'];
-
+  
   const [filters, setFilters] = useState({pageNumber: 1});
   const [newSessionModalOpen, setNewSessionModalOpen] = useState(false);
   const [editSessionId, setEditSessionId] = useState('');
   const [editSessionData, setEditSessionData] = useState({});
   const [showProcessingModalOpen, setShowProcessingModalOpen] = useState({});
-
+  
   const {isLoading, data: sessionsData} = request.useQuery({
     url: `/v1/course/${courseId}/sessions`,
     params: filters,
     queryKey: ['sessions-list', courseId, filters],
     enabled: !!courseId
   });
-
+  
   const {
     isPending: lastProcessOnCreateBtnIsLoading,
     mutateAsync: getLastProcessOnCreateBtnRequest
@@ -37,7 +37,7 @@ const SessionsTable = () => {
     showMessage: false,
     mutationKey: ['getLastProcessStatusOnCreate']
   });
-
+  
   const {
     isPending: lastProcessOnUpdateBtnIsLoading,
     mutateAsync: getLastProcessOnUpdateBtnRequest
@@ -47,22 +47,22 @@ const SessionsTable = () => {
     showMessage: false,
     mutationKey: ['getLastProcessStatusOnUpdate']
   });
-
+  
   const sessions = sessionsData?.response?.sessions || [];
   const sessionsCount = sessionsData?.response?.count || 0;
-
+  
   const handleEditSession = (sessionId, sessionData) => {
     setEditSessionId(sessionId);
     setEditSessionData(sessionData);
     setNewSessionModalOpen(true);
   };
-
+  
   const handleOnCloseNewSessionModal = () => {
     setEditSessionId('');
     setEditSessionData({});
     setNewSessionModalOpen(false);
   };
-
+  
   const uploadedVideoStatus = {
     unknown: 'نا مشخص',
     uploaded: 'بارگذاری شده',
@@ -74,20 +74,22 @@ const SessionsTable = () => {
     ready: 'آماده برای نمایش',
     failedProcess: 'پردازش ناموفق'
   };
-
+  
   const columns = [
-      {
-          title: 'تصویر',
-          align: 'center',
-          dataIndex: 'image',
-          render: (image) => (
-              image ?
-                  <Image src={baseURL?._baseURL + '/public/sessionImage/' + image} alt="" width={40} height={40} /> :
-                  <span className="p-8 bg-neutral-gray-4 border-solid border-[.5px] border-neutral-gray-8 rounded-full">
+    {
+      title: 'تصویر',
+      align: 'center',
+      dataIndex: 'image',
+      render: (image) => (
+        image ?
+          <Image src={baseURL?._baseURL + '/public/sessionImage/' + image} alt="" width={40} height={40} /> :
+          <span
+            className="p-8 bg-neutral-gray-4 border-solid border-[.5px] border-neutral-gray-8 rounded-full"
+          >
             <FilePdfOutlined className="!text-primary !text-[22px] !align-middle" />
           </span>
-          )
-      },
+      )
+    },
     {
       title: 'شماره جلسه',
       align: 'center',
@@ -122,9 +124,9 @@ const SessionsTable = () => {
             className="!text-primary !text-[18px] cursor-pointer"
             onClick={async () => {
               const res = await getLastProcessOnUpdateBtnRequest();
-
+              
               const isProcessOngoing = res?.response?.isProcessOngoing;
-
+              
               if (isProcessOngoing) {
                 setShowProcessingModalOpen({
                   show: true,
@@ -143,23 +145,23 @@ const SessionsTable = () => {
         </>
     }
   ];
-
+  
   return (
     <>
       <Row justify={'space-between'} align={'middle'}>
         <Col>
           جلسات دوره
         </Col>
-
+        
         <Col>
           <Button
             loading={lastProcessOnCreateBtnIsLoading}
             type={'primary'}
             onClick={async () => {
               const res = await getLastProcessOnCreateBtnRequest();
-
+              
               const isProcessOngoing = res?.response?.isProcessOngoing;
-
+              
               if (isProcessOngoing) {
                 setShowProcessingModalOpen({
                   show: true,
@@ -176,7 +178,7 @@ const SessionsTable = () => {
           </Button>
         </Col>
       </Row>
-
+      
       <div className="bg-white my-[20px] py-[40px] px-[16px]">
         <Table
           loading={isLoading}
@@ -194,7 +196,7 @@ const SessionsTable = () => {
           rowKey={'_id'}
         />
       </div>
-
+      
       <Modal
         open={newSessionModalOpen}
         onCancel={handleOnCloseNewSessionModal}
@@ -211,7 +213,7 @@ const SessionsTable = () => {
           courseId={courseId}
         />
       </Modal>
-
+      
       <Modal
         open={showProcessingModalOpen?.show}
         onCancel={() => setShowProcessingModalOpen({})}
@@ -223,7 +225,7 @@ const SessionsTable = () => {
       >
         {!!showProcessingModalOpen?.show && showProcessingModalOpen?.for === 'create' &&
           <ShowProcessingForCreate setShowProcessingModalOpen={setShowProcessingModalOpen} />}
-
+        
         {!!showProcessingModalOpen?.show && showProcessingModalOpen?.for === 'update' &&
           <ShowProcessingForUpdate
             showProcessingModalOpen={showProcessingModalOpen}
@@ -241,7 +243,7 @@ const ShowProcessingForCreate = ({setShowProcessingModalOpen}) => {
       <Col span={24} className="text-neutral-black2 text-captionXl2 text-center">
         در حال حاظر ویدئویی در حال پرازش است! لطفا در زمانی دیگر مجددا تلاش کنید.
       </Col>
-
+      
       <Col span={24} className="pt-64 text-center">
         <Button className="w-[176px]" onClick={() => setShowProcessingModalOpen({})}>
           متوجه شدم
@@ -255,9 +257,10 @@ const ShowProcessingForUpdate = ({showProcessingModalOpen, setShowProcessingModa
   return (
     <Row>
       <Col span={24} className="text-neutral-black2 text-captionXl2 text-center">
-        در حال حاظر ویدئویی در حال پرازش است! در حال حاظر امکان ویرایش ویدئو جلسه وجود ندارد اما باقی فیلدها قابل ویرایش می‌باشد.
+        در حال حاظر ویدئویی در حال پرازش است! در حال حاظر امکان ویرایش ویدئو جلسه وجود ندارد اما باقی فیلدها
+        قابل ویرایش می‌باشد.
       </Col>
-
+      
       <Col span={24} className="pt-64 text-center">
         <Space>
           <Button
@@ -269,7 +272,7 @@ const ShowProcessingForUpdate = ({showProcessingModalOpen, setShowProcessingModa
           >
             ویرایش
           </Button>
-
+          
           <Button className="w-[176px]" onClick={() => setShowProcessingModalOpen({})}>
             متوجه شدم
           </Button>

@@ -7,17 +7,14 @@ import {DateObject} from 'react-multi-date-picker';
 import gregorian from 'react-date-object/calendars/gregorian';
 import gregorian_en from 'react-date-object/locales/gregorian_en';
 import persian from 'react-date-object/calendars/persian';
-import {Button, Col, Form, Input, Modal, Row, Select, Switch, Table, Typography} from 'antd';
+import {Button, Col, Form, Input, Modal, Row, Switch, Table, Typography} from 'antd';
 import {SearchOutlined} from '@/templates/icons';
 import {debounce} from 'lodash';
-import dynamic from 'next/dynamic';
 import SaveUserForm from './save-user-form';
 import {truncatedMiddleText} from '@/utils/helpers';
 import {useAxiosClient} from '@/utils/axios/useAxiosClient';
 import {EditOutlined} from '@ant-design/icons';
 import UserToken from '@/app/dashboard/users/components/user-token';
-
-const DatePicker = dynamic(() => import('@/templates/UI/date-picker').then((mod) => mod.DatePicker), {ssr: false});
 
 const UsersTable = () => {
   const [formRef] = Form.useForm();

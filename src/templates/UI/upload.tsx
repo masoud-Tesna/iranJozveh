@@ -21,7 +21,7 @@ export const Upload: FC<TUploadProps> = ({
   beforeUploadFile,
   editFile,
   children,
-  uploadIconFull= false,
+  uploadIconFull = false,
   ...rest
 }) => {
   const formRef = Form.useFormInstance();
@@ -61,7 +61,6 @@ export const Upload: FC<TUploadProps> = ({
         handleReturnResponse(res?.response);
       }
     }
-
     catch (error) {
       console.log('error upload .>', error);
     }
@@ -74,30 +73,28 @@ export const Upload: FC<TUploadProps> = ({
     }
   };
 
-  const uploadSpan = uploadIconFull ? {span: 24} : {}
+  const uploadSpan = uploadIconFull ? { span: 24 } : {};
 
   const uploadButton = (
     <div className="border-dashed border border-neutral-gray-4 w-full h-full px-2 py-8">
-      <Row align={'middle'} justify={'space-between'} gutter={[8,8]} className='h-full'>
-        <Col {...uploadSpan}>
+      <Row align={ 'middle' } justify={ 'space-between' } gutter={ [8, 8] } className="h-full">
+        <Col { ...uploadSpan }>
           { rest.uploadButtonTitle }
         </Col>
 
-        <Col {...uploadSpan}>
-          { isLoading ? <LoadingOutlined /> : <UploadFilled className='!text-[33px] !text-gray-60' /> }
+        <Col { ...uploadSpan }>
+          { isLoading ? <LoadingOutlined /> : <UploadFilled className="!text-[33px] !text-gray-60" /> }
         </Col>
       </Row>
 
 
-
+      {/*
+       { rest.uploadButtonTitle }
+       */ }
 
       {/*
-      { rest.uploadButtonTitle }
-      */}
-
-      {/*
-      { isLoading ? <LoadingOutlined /> : <UploadFilled className='!text-[33px] !text-gray-60' /> }
-      */}
+       { isLoading ? <LoadingOutlined /> : <UploadFilled className='!text-[33px] !text-gray-60' /> }
+       */ }
 
     </div>
   );
@@ -119,7 +116,7 @@ export const Upload: FC<TUploadProps> = ({
       className={ classNames(
         className,
         '--avatar-uploader',
-          {'--asImageType': fileType === 'image'},
+        { '--asImageType': fileType === 'image' },
         { '[&>div>span]:p-[11px]': !imageUrl },
         { '--removeLogo': deleteFile && imageUrl }
         // { '[&>div>span]:pointer-events-none': deleteFile && imageUrl }
@@ -157,14 +154,14 @@ export const Upload: FC<TUploadProps> = ({
 
 const ShowComponent = () => {
   return (
+    <div>
       <div>
-        <div>
-          #1
-        </div>
-
-        <div>
-          #2
-        </div>
+        #1
       </div>
-  )
-}
+
+      <div>
+        #2
+      </div>
+    </div>
+  );
+};

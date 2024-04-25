@@ -12,33 +12,33 @@ import Link from 'next/link';
 
 const CoursesTable = () => {
   const request = useRequest();
-
+  
   const [filters, setFilters] = useState({pageNumber: 1});
   const [newCourseModalOpen, setNewCourseModalOpen] = useState(false);
   const [editCourseId, setEditCourseId] = useState('');
   const [editCourseData, setEditCourseData] = useState({});
-
+  
   const {isLoading, data: coursesData} = request.useQuery({
     url: '/v1/course',
     params: filters,
     queryKey: ['course-list', filters]
   });
-
+  
   const courses = coursesData?.response?.courses || [];
   const coursesCount = coursesData?.response?.count || 0;
-
+  
   const handleEditCourse = (userId, userData) => {
     setEditCourseId(userId);
     setEditCourseData(userData);
     setNewCourseModalOpen(true);
   };
-
+  
   const handleOnCloseNewCourseModal = () => {
     setEditCourseId('');
     setEditCourseData({});
     setNewCourseModalOpen(false);
   };
-
+  
   const columns = [
     {
       title: 'تصویر',
@@ -47,7 +47,9 @@ const CoursesTable = () => {
       render: (image) => (
         image ?
           <Image src={baseURL?._baseURL + '/public/products/image/' + image} alt="" width={40} height={40} /> :
-          <span className="p-8 bg-neutral-gray-4 border-solid border-[.5px] border-neutral-gray-8 rounded-full">
+          <span
+            className="p-8 bg-neutral-gray-4 border-solid border-[.5px] border-neutral-gray-8 rounded-full"
+          >
             <FilePdfOutlined className="!text-primary !text-[22px] !align-middle" />
           </span>
       )
@@ -87,7 +89,7 @@ const CoursesTable = () => {
       </Badge>
     }
   ];
-
+  
   return (
     <>
       <div className="text-end">
@@ -95,7 +97,7 @@ const CoursesTable = () => {
           افزودن دوره جدید
         </Button>
       </div>
-
+      
       <div className="bg-white my-[20px] py-[40px] px-[16px]">
         <Table
           loading={isLoading}
@@ -113,7 +115,7 @@ const CoursesTable = () => {
           rowKey={'_id'}
         />
       </div>
-
+      
       <Modal
         open={newCourseModalOpen}
         onCancel={handleOnCloseNewCourseModal}

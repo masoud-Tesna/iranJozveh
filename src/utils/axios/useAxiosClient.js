@@ -1,7 +1,6 @@
 import axios from 'axios';
 import baseURL from './baseURL';
 import {useQueryClient} from '@tanstack/react-query';
-import {useRouter} from 'next/navigation';
 import {useAuth} from '@/app/context/auth/auth-context';
 import handleRefreshToken from '@/utils/axios/handleRefreshToken';
 

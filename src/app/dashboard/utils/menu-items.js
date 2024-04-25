@@ -1,4 +1,4 @@
-import {AndroidOutlined, CollaborationOutlined, ReceiptTextOutlined, UsersOutlined} from '@/templates/icons';
+import {AndroidOutlined, ReceiptTextOutlined, UsersOutlined} from '@/templates/icons';
 
 export const menuItems = [
   {
@@ -83,7 +83,6 @@ function find(t, func) {
         result?.push([node, ...childResult[0]]);
       }
     }
-    
     else if (node.breadCrumbItems) {
       const childResult = find(node?.breadCrumbItems, func);
       if (childResult?.length > 0) {

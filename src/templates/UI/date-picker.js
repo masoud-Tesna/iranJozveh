@@ -7,7 +7,7 @@ import transition from 'react-element-popper/animations/transition';
 import opacity from 'react-element-popper/animations/opacity';
 import 'react-multi-date-picker/styles/layouts/mobile.css';
 import {useWindowSize} from '@/utils/helpers';
-import {ConfigProvider, Form, Input} from 'antd';
+import {ConfigProvider, Input} from 'antd';
 import {CalendarDateOutlined} from '@/templates/icons';
 
 export const DatePicker = (props) => {

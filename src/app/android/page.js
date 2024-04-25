@@ -1,4 +1,4 @@
-import {Button, Col, Row} from 'antd';
+import {Col, Row} from 'antd';
 import appLogo from '/public/images/logo.svg';
 import Image from 'next/image';
 import AndroidNewVersionAnimation from '@/app/android/components/android-new-version-animation';
