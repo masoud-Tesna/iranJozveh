@@ -8,11 +8,11 @@ export const NewUserZod = z.object({
   fullName: FullNameZod,
   mobileNumber: MobileNumberZod,
   nationalCode: NationalCodeZod,
-  selectedTextbooks: z.array(z.object({
+  selectedTextbooksBK: z.array(z.object({
     value: z.string(),
     label: z.string()
   }), { required_error: setInputRule('requiredSelectBox', { inputName: 'درسنامه های مجاز' }) }),
-  selectedCourses2: z.array(z.object({
+  selectedCoursesBK: z.array(z.object({
     value: z.string(),
     label: z.string()
   }), { required_error: setInputRule('requiredSelectBox', { inputName: 'ویدئوهای آموزشی مجاز' }) })
