@@ -6,21 +6,23 @@ import {Upload} from '@/templates/UI';
 import baseURL from '@/utils/axios/baseURL';
 import {NewSessionZod} from '@/app/dashboard/products/course/[course-id]/schema/new-session';
 import {setInputRule} from '@/utils/setInputRule';
+import {useUploadProgress} from '@/app/context/upload-progress';
 
 const SaveSessionForm = ({handleCloseModal, editSessionId, editSessionData, courseId}) => {
-  
+
   const [formRef] = Form.useForm();
   const queryClient = useQueryClient();
   const request = useRequest();
-  
+  const {handleToggleShowProgressbar, handleOnChangeUploadDPercent} = useUploadProgress();
+
   const numberWatch = Form.useWatch('number', formRef);
   const timeWatch = Form.useWatch('time', formRef);
   const descriptionWatch = Form.useWatch('description', formRef);
   const imageWatch = Form.useWatch('image', formRef);
-  
+
   const beforeUploadImage = async (file) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    
+
     if (!isJpgOrPng) {
       formRef.setFields([
         {
@@ -43,9 +45,9 @@ const SaveSessionForm = ({handleCloseModal, editSessionId, editSessionData, cour
         }
       ]);
     }
-    
+
     const isLt2M = file.size / 1024 / 1024 < 0.5;
-    
+
     if (!isLt2M) {
       formRef.setFields([
         {
@@ -68,14 +70,18 @@ const SaveSessionForm = ({handleCloseModal, editSessionId, editSessionData, cour
         }
       ]);
     }
-    
+
     return Promise.resolve();
   };
-  
+
   const handleDeleteImage = async () => formRef.setFieldsValue({image: undefined});
-  
+
   const handleDeleteVideo = async () => formRef.setFieldsValue({video: undefined});
-  
+
+  const onProgress = ({percent}) => {
+    handleOnChangeUploadDPercent(percent);
+  }
+
   const {isPending: createSessionIsLoading, mutateAsync: createSessionRequest} = request.useMutation({
     url: `/v1/course/${courseId}/session`,
     formType: 'formData',
@@ -85,9 +91,12 @@ const SaveSessionForm = ({handleCloseModal, editSessionId, editSessionData, cour
       description: descriptionWatch,
       image: imageWatch
     },
+    onUploadProgress: event => {
+      onProgress({ percent: (event.loaded / event.total) * 100 });
+    },
     mutationKey: ['createSession', courseId]
   });
-  
+
   const {isPending: updateSessionIsLoading, mutateAsync: updateSessionRequest} = request.useMutation({
     url: `/v1/course/${courseId}/session/${editSessionId}`,
     method: 'patch',
@@ -98,37 +107,45 @@ const SaveSessionForm = ({handleCloseModal, editSessionId, editSessionData, cour
       description: descriptionWatch,
       image: imageWatch
     },
+    onUploadProgress: event => {
+      onProgress({ percent: (event.loaded / event.total) * 100 });
+    },
     mutationKey: ['updateSession', courseId, editSessionData]
   });
-  
+
   const handleOnFinishForm = async () => {
     try {
       await formRef.validateFields();
-      
+
       const video = formRef.getFieldValue('video');
-      
+
       const formData = new FormData;
-      
+
       if (!video?.oldVideo) {
         formData.append('video', video);
       }
-      
-      
+
+
+      await handleToggleShowProgressbar(true);
+
       if (editSessionId && courseId) {
         await updateSessionRequest(formData);
       }
       else {
         await createSessionRequest(formData);
       }
-      
+
+      await handleToggleShowProgressbar(false)
+
       await queryClient.refetchQueries({queryKey: ['sessions-list', courseId]});
-      
+
       await handleCloseModal();
     } catch (error) {
+      await handleToggleShowProgressbar(false)
       console.log('error in handleOnFinishForm >>', error);
     }
   };
-  
+
   return (
     <Spin spinning={createSessionIsLoading || updateSessionIsLoading}>
       <Form
@@ -145,7 +162,7 @@ const SaveSessionForm = ({handleCloseModal, editSessionId, editSessionData, cour
               <Input placeholder="شماره جلسه" />
             </Form.Item>
           </Col>
-          
+
           <Col span={12}>
             <Form.Item
               name={'time'}
@@ -154,7 +171,7 @@ const SaveSessionForm = ({handleCloseModal, editSessionId, editSessionData, cour
               <Input placeholder="مدت زمان (دقیقه)" />
             </Form.Item>
           </Col>
-          
+
           <Col span={18}>
             <Form.Item
               name={'description'}
@@ -163,7 +180,7 @@ const SaveSessionForm = ({handleCloseModal, editSessionId, editSessionData, cour
               <Input.TextArea placeholder={'توضیحات'} rows={5} minLength={10} maxLength={150} showCount />
             </Form.Item>
           </Col>
-          
+
           <Col span={6}>
             <Form.Item
               name="image"
@@ -202,7 +219,7 @@ const SaveSessionForm = ({handleCloseModal, editSessionId, editSessionData, cour
               />
             </Form.Item>
           </Col>
-          
+
           <Col span={24}>
             <Form.Item
               name="video"
@@ -230,13 +247,13 @@ const SaveSessionForm = ({handleCloseModal, editSessionId, editSessionData, cour
               />
             </Form.Item>
           </Col>
-          
+
           <Col span={24} className="pt-64 text-center">
             <Space>
               <Button className="w-[176px]" onClick={handleCloseModal}>
                 لغو
               </Button>
-              
+
               <Button type="primary" className="w-[176px]" onClick={handleOnFinishForm}>
                 {editSessionId ? 'ویرایش جلسه' : 'ایجاد جلسه'}
               </Button>

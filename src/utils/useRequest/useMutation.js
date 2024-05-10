@@ -18,6 +18,7 @@ export const useMutation = (
     customErrorMessage = null,
     formType = 'JSON',
     customRequestHeader,
+    onUploadProgress,
     ...rest
   }
 ) => {
@@ -50,7 +51,8 @@ export const useMutation = (
         method,
         url,
         params,
-        data
+        data,
+        onUploadProgress
       }
     );
     return result?.data;

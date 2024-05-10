@@ -12,9 +12,9 @@ import {AntdRegistry} from '@ant-design/nextjs-registry';
 import {AuthProvider} from '@/app/context/auth/auth-context';
 
 const CombineProvider = ({children}) => {
-  
+
   const [queryClient] = useState(() => new QueryClient());
-  
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
@@ -28,10 +28,11 @@ const CombineProvider = ({children}) => {
               theme="colored"
               closeButton
               bodyClassName="text-[0.875rem] font-vazir"
+              stacked
             />
-            
+
             {children}
-            
+
             <ReactQueryDevtools />
           </ConfigProvider>
         </AntdRegistry>
