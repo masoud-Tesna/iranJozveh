@@ -23,7 +23,7 @@ const TextbookTable = () => {
   const [editProductId, setEditProductId] = useState('');
   const [editProductData, setEditProductData] = useState({});
   
-  const handleOnChangeSearchFilter = search => setFilters(current => ({...current, search}));
+  const handleOnChangeSearchFilter = search => setFilters(current => ({...current, pageNumber: 1, search}));
   
   const debouncedOnSearch = useMemo(search => debounce(handleOnChangeSearchFilter, 500), []);
   
@@ -111,7 +111,7 @@ const TextbookTable = () => {
                     setFilters(current => {
                       const {search: _, ...rest} = current;
                       
-                      return rest;
+                      return {...rest, pageNumber: 1};
                     });
                   }
                   else if (value.length >= 3) {

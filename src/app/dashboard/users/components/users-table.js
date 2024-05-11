@@ -28,11 +28,11 @@ const UsersTable = () => {
   const [editUserId, setEditUserId] = useState('');
   const [editUserData, setEditUserData] = useState({});
   
-  const handleOnChangeNationalCodeFilter = nationalCode => setFilters(current => ({...current, nationalCode}));
+  const handleOnChangeNationalCodeFilter = nationalCode => setFilters(current => ({...current, pageNumber:1, nationalCode}));
   
   const debouncedOnSearchNationalCode = useMemo(search => debounce(handleOnChangeNationalCodeFilter, 500), []);
   
-  const handleOnChangeTokenFilter = token => setFilters(current => ({...current, token}));
+  const handleOnChangeTokenFilter = token => setFilters(current => ({...current, pageNumber:1, token}));
   
   const debouncedOnSearchToken = useMemo(search => debounce(handleOnChangeTokenFilter, 500), []);
   
